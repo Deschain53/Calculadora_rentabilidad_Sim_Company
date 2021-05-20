@@ -110,12 +110,10 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         calculado = false;
         calculado_todo = false;
         abundancia = 100;
-        odn_button.setVisible(false);
         abundancia_txt.setText("");
         abundancia_lb.setVisible(false);
         abundanciaP_lb.setVisible(false);
         abundancia_txt.setVisible(false);
-        tablaA.setVisible(false);
         dp = new DetalleProductos(español);
         dp2 = new DetalleProductosEditable(español);
         modeloAvanzado = new DefaultTableModel() {
@@ -135,13 +133,60 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         nPEN = new NombresPEN();
         jep = new JSONedificiosProduccion();
         investigaciones = 20;
+        ocultaBotonesCalculadoraAvanzada();
 
     }
 
-    public void devuelveVentanaInicial() {
+    private void devuelveVentanaInicial() {
         Calculadora_rentabilidad.super.setSize(875, 412);//875, 412);
     }
 
+    private void ocultaBotonesCalculadoraAvanzada(){
+        odn_button.setVisible(false);
+        agrega_button.setVisible(false);
+        recalcula_button.setVisible(false);
+        extrae_button.setVisible(false);
+        elimina_button.setVisible(false);
+        eliminaTodos.setVisible(false);
+        tablaA.setVisible(false);
+    }
+    
+    private void muestraBotonesCalculadoraAvanzada(){
+        odn_button.setVisible(true);
+        agrega_button.setVisible(true);
+        recalcula_button.setVisible(true);
+        extrae_button.setVisible(true);
+        elimina_button.setVisible(true);
+        eliminaTodos.setVisible(true);
+        tablaA.setVisible(true);
+    }    
+    
+    private void rellenaDatosDefecto(){
+        if(gastos_administrativos_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+            gastos_administrativos_txt.setText("50");
+        }
+        
+        if(bonificacion_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+            bonificacion_txt.setText("0");
+        }
+
+        if(costo_transporte_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+            costo_transporte_txt.setText("0.35");
+        }
+
+        if(abundancia_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+            abundancia_txt.setText("100");
+        }        
+        
+        if(nivel_edificio_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+            nivel_edificio_txt.setText("1");
+        }   
+
+        if(Pvbm_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+            Pvbm_txt.setText("3");
+        }         
+    }    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -178,7 +223,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         cambia_idioma = new javax.swing.JButton();
         idioma_lb = new javax.swing.JLabel();
-        calculaTodo_button = new javax.swing.JButton();
         tipoCalcu_combo = new javax.swing.JComboBox<>();
         odn_button = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -274,8 +318,8 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
         costo_transporte_txt.setText("jTextField1");
 
-        calcula_button.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        calcula_button.setText("Calcula");
+        calcula_button.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        calcula_button.setText("Obtener datos");
         calcula_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 calcula_buttonActionPerformed(evt);
@@ -306,13 +350,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         });
 
         idioma_lb.setText("Idioma:");
-
-        calculaTodo_button.setText("Calcula para todos los edificios");
-        calculaTodo_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                calculaTodo_buttonActionPerformed(evt);
-            }
-        });
 
         tipoCalcu_combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         tipoCalcu_combo.addActionListener(new java.awt.event.ActionListener() {
@@ -514,8 +551,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(extrae_button))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(calculaTodo_button)
-                                        .addGap(56, 56, 56)
+                                        .addGap(260, 260, 260)
                                         .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -597,7 +633,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                     .addComponent(cambia_idioma)
                     .addComponent(idioma_lb)
                     .addComponent(informacion)
-                    .addComponent(calculaTodo_button)
                     .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -644,58 +679,20 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     }//GEN-LAST:event_calidad_boxActionPerformed
 
     private void calcula_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcula_buttonActionPerformed
-        //seleccionaFase();
-        System.out.println("cargando............");
-        /*long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecución
-        TInicio = System.currentTimeMillis();*/
-
-        try {
-            //if (!calculado) {
-            //    calculaTodo();
-            // } else {
-                //nPEN.getPerdidos();///Para pruebas
-                leeDatosLocales();
-                cleanTabla();
-                try {
-                    seleccionaFase();
-                    int index = edificios_combo.getSelectedIndex();
-                    extraeInfoEdificio(index);
-                    etf = etfT[index];
-                    for (int i = 0; i < po.length; i++) {
-                        if (po[i] != null) {
-                            po[i].actualizaPrecios();
-                        }
-                    }
-                    lastEdificioD = index;
-                    newCalcula();
-
-                } catch (IOException ex) {
-                    Logger.getLogger(Calculadora_rentabilidad.class.getName()).log(Level.SEVERE, null, ex);
-
-                    if (español) {
-                        JOptionPane.showMessageDialog(this, "Al parecer no hay internet",
-                                "Alerta", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "It seems there is not internet",
-                                "Warning", JOptionPane.ERROR_MESSAGE);
-                    }
-
-                }
-            // }
-        } catch (NumberFormatException e) {
-            if (español) {
-                JOptionPane.showMessageDialog(this, "Revise que haya rellenado todos los campos correctamente",
-                        "Alerta", JOptionPane.WARNING_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Check if all fields are filled correctly ",
-                        "Warning", JOptionPane.WARNING_MESSAGE);
+        if(calculado == true){
+           int dialogButton = 0;
+           if(español){
+                dialogButton = JOptionPane.showConfirmDialog(null, "Volveras a tomar los datos desde internet, Estas seguro? ", "Advertencia", JOptionPane.YES_NO_OPTION);
+           }else{
+                dialogButton = JOptionPane.showConfirmDialog(null, "You will get the data from internet again, Are you sure?", "Warning", JOptionPane.YES_NO_OPTION);
+           }      
+        if (dialogButton == JOptionPane.YES_OPTION) {
+                calculaTodo();
             }
-        } finally {
-            /*TFin = System.currentTimeMillis(); //Tomamos la hora en que finalizó el algoritmo y la almacenamos en la variable T
-                tiempo = TFin - TInicio;
-                System.out.println("Calculo terminado, tiempo:" +  tiempo );*/
-        }
+       }else{
+        calculaTodo();
         calculado = true;
+       }
     }//GEN-LAST:event_calcula_buttonActionPerformed
 
     public void extraeInfoEdificio(int index) throws IOException {
@@ -704,8 +701,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         etf.setUrlEconomia(fase);
         etf.setJSONedificio(jep.getEdificioIndex(index));
         etf.extraeProduce();
-
-        // etf.setNumeroEdificio(index);
         etfT[index] = etf; //Para guardar en memoria los datos del edificio extraido  ///
         etfT[index].setProductObject(po);
         if (index < investigaciones) {
@@ -758,10 +753,9 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 administrativos_lb.setText("Administration overhead:");
                 bonificacion_lb.setText("Production speed bonus:");
                 costo_transporte_label.setText("Transport cost:");
-                calcula_button.setText("Calculate");
+                calcula_button.setText("Get data");
                 idioma_lb.setText("Languaje:");
                 R_button.setText("Recession");
-                calculaTodo_button.setText("Calculate for all buildings");
                 agrega_button.setText("Add product");
                 elimina_button.setText("Delete product");
                 fe_lb.setText("Economic phase");
@@ -794,12 +788,11 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 administrativos_lb.setText("Gastos administrativos:");
                 bonificacion_lb.setText("Bonificación de producción:");
                 costo_transporte_label.setText("Costo transporte:");
-                calcula_button.setText("Calcula");
+                calcula_button.setText("Obtener datos");
                 idioma_lb.setText("Idioma:");
                 odn_button.setText("Obtener datos de calculadora normal");
                 recalcula_button.setText("Recalcula");
                 R_button.setText("Recesión");
-                calculaTodo_button.setText("Calcula para todos los edificios");
                 agrega_button.setText("Agregar producto");
                 elimina_button.setText("Eliminar producto");
                 fe_lb.setText("Fase económica");
@@ -836,17 +829,17 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 abundancia_lb.setVisible(true);
                 abundanciaP_lb.setVisible(true);
                 abundancia_txt.setVisible(true);
-                Calculadora_rentabilidad.super.setSize(875, 414);
+                //Calculadora_rentabilidad.super.setSize(875, 414);
             } else {
                 abundancia_lb.setVisible(false);
                 abundanciaP_lb.setVisible(false);
                 abundancia_txt.setVisible(false);
-                if (tipoCalcu_combo.getSelectedIndex() == 0) {
+                /*if (tipoCalcu_combo.getSelectedIndex() == 0) {
                     devuelveVentanaInicial();
-                }
+                }*/
             }
 
-            if (calculado_todo) {
+            if (calculado) {
                 cleanTabla();
                 etf = etfT[edificios_combo.getSelectedIndex()];
                 lastEdificioD = etf.getNumeroEdificio();
@@ -863,10 +856,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_edificios_comboActionPerformed
-
-    private void calculaTodo_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculaTodo_buttonActionPerformed
-        calculaTodo();
-    }//GEN-LAST:event_calculaTodo_buttonActionPerformed
 
     private void calculaTodo() {
         //System.out.println("Calculando todos los datos del edificio");
@@ -934,10 +923,10 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             cambiaAvanzado();
         } else if (tipoCalcu_combo.getSelectedIndex() == 1 && !calculado) {
             if (español) {
-                JOptionPane.showMessageDialog(this, "Primero debe calcular los datos para algun edificio",
+                JOptionPane.showMessageDialog(this, "Primero debe obtener los datos de internet",
                         "Alerta", JOptionPane.WARNING_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "You have to calculate the data for any building first",
+                JOptionPane.showMessageDialog(this, "You have to get the data from internee first",
                         "Warning", JOptionPane.WARNING_MESSAGE);
             }
             tipoCalcu_combo.setSelectedIndex(0);
@@ -983,7 +972,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 agregaUnProducto(i);
             }
         }
-        //actualizaTablaA();
     }//GEN-LAST:event_odn_buttonActionPerformed
 
     private void recalcula_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recalcula_buttonActionPerformed
@@ -1097,9 +1085,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         cleanTabla2();
         POIlist = new ArrayList<ProductObject>();
         dec = new ArrayList<DatosEntrantesCalcu>();
-        /*porcentajeBM_lista = new ArrayList<String>();
-        precio_transporte_lista = new ArrayList<String>();
-        calidad_list = new ArrayList<Integer>(); */
     }
 
     private void tablaAMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaAMouseClicked
@@ -1109,13 +1094,11 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             ProductObject productoActual = POIlist.get(fila);
 
             int indexEdificio = productoActual.getNumeroEdificio();
-            // System.out.println(productoActual.getNombre() + " -fabricado en - " + indexEdificio);
             DefaultTableModel mA = (DefaultTableModel) tablaA.getModel();
             Object nombre = mA.getValueAt(fila, 0);
             dp2.setNombreProducto((String) nombre);
             dp2.setAllPO(po);
             dp2.setCalidadaAProducir(dec.get(fila).getCalidad());
-            //dp2.setCalidadaAProducir(productoActual.getCalidad());//esto se podria reducir puesto que ya se esta pasando el productObject a el DetalleProductoEditable
             dp2.setPO(productoActual);
             dp2.setAbundancia(dec.get(fila).getAbundancia());
             dp2.setBonificacion(dec.get(fila).getBonificacion());
@@ -1143,9 +1126,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
     private void recalculaTablaB_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recalculaTablaB_buttonActionPerformed
         if (calculado || calculado_todo) {
-            /*if(etfT[edificios_combo.getSelectedIndex()]!= null){
-                etf = etfT[edificios_combo.getSelectedIndex()];
-            }*/
             leeDatosLocales();
             cleanTabla();
             newCalcula();
@@ -1171,11 +1151,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         DefaultTableModel mA = (DefaultTableModel) tablaA.getModel();
         mA.removeRow(indexTablaASelec);
         POIlist.remove(indexTablaASelec);
-        dec.remove(indexTablaASelec);
-        /*porcentajeBM_lista.remove(indexTablaASelec);  //experimental
-        precio_transporte_lista.remove(indexTablaASelec);  //experimental
-        calidad_list.remove(indexTablaASelec);  //experimental*/
-        //System.out.println("Eliminado " + indexTablaASelec + " ;POIl numero: " + POIlist.size()+ mA.getRowCount());   
+        dec.remove(indexTablaASelec);  
         tablaA.setModel(mA);
     }
 
@@ -1218,11 +1194,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
             poi.setCalidad(calidad);   //Esto se movio
             POIlist.add(poi);
-            /*porcentajeBM_lista.add(Float.toString(porcentaje_bajoMercado));  //De prueba
-            // System.out.println(Float.toString(porcentaje_bajoMercado));
-            precio_transporte_lista.add(Float.toString(precio_transporte)); ///De prueba            
-             //System.out.println(Float.toString(precio_transporte));
-            calidad_list.add(calidad);*/  ///Esto era para extraer los datos de la esa cosa actual
             agrega_a_lista_DEC();
 
         } catch (NumberFormatException e) {
@@ -1230,7 +1201,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         }
     }
 
-    public void agrega_a_lista_DEC() {
+    private void agrega_a_lista_DEC() {
         DatosEntrantesCalcu decAux = new DatosEntrantesCalcu();
         decAux.setGastosAdministrativos(gastos_administrativos);
         decAux.setBonificacion(bonificacion_produccion);
@@ -1245,7 +1216,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
     }
 
-    public void recalcula() {
+    private void recalcula() {
         try {
             TableModel tm = tablaA.getModel();
             leeDatosLocales();
@@ -1270,9 +1241,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 float costoMprimaQ = Float.parseFloat(cmQ.toString());
                 float precioMercado = Float.parseFloat(pm.toString());
                 float porcentajeBM = dec.get(i).getPorcentaje_bajo_mercado();
-                //System.out.println("El porcentaje bajo mercado es: " + porcentajeBM + " para " + i);
                 float precioT = dec.get(i).getCostoTransporte();
-                //System.out.println("El porcentaje bajo mercado es: " + precioT + " para " + i);
 
                 ganancia_horaC = (float) ((((precioMercado * (1 - (porcentajeBM / 100)) - costoMprimaQ)) - materiaActual.getTransporte() * precioT * 0.5) * ProduccionHora);
                 ganancia_horaM = (float) ((((precioMercado * 0.97 - costoMprimaQ)) - materiaActual.getTransporte() * precioT) * ProduccionHora);
@@ -1309,16 +1278,16 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     }
 
     private void cambiaAvanzado() {
-        odn_button.setVisible(true);
         Calculadora_rentabilidad.super.setSize(875, 635);//877, 720);//(874, 572);  
-        tablaA.setVisible(true);
+        muestraBotonesCalculadoraAvanzada();
 
     }
 
     private void cambiaBasico() {
-        odn_button.setVisible(false);
         devuelveVentanaInicial();
+        ocultaBotonesCalculadoraAvanzada();
         newCalcula();
+        
     }
 
     private void leeDatosLocales() {
@@ -1334,7 +1303,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         }
     }
 
-    public void cleanTabla() {
+    private void cleanTabla() {
         DefaultTableModel tb = (DefaultTableModel) tablaD.getModel();
         int a = tablaD.getRowCount() - 1;
         for (int i = a; i >= 0; i--) {
@@ -1342,11 +1311,64 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         }
     }
 
-    public void cleanTabla2() {
+    private void cleanTabla2() {
         DefaultTableModel tb = (DefaultTableModel) tablaA.getModel();
         int a = tablaA.getRowCount() - 1;
         for (int i = a; i >= 0; i--) {
             tb.removeRow(tb.getRowCount() - 1);
+        }
+    }
+    
+    private void calculaUno(){
+        System.out.println("cargando............");
+        /*long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecución
+        TInicio = System.currentTimeMillis();*/
+
+        try {
+            //if (!calculado) {
+            //    calculaTodo();
+            // } else {
+                //nPEN.getPerdidos();///Para pruebas
+                leeDatosLocales();
+                cleanTabla();
+                try {
+                    seleccionaFase();
+                    int index = edificios_combo.getSelectedIndex();
+                    extraeInfoEdificio(index);
+                    etf = etfT[index];
+                    for (int i = 0; i < po.length; i++) {
+                        if (po[i] != null) {
+                            po[i].actualizaPrecios();
+                        }
+                    }
+                    lastEdificioD = index;
+                    newCalcula();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(Calculadora_rentabilidad.class.getName()).log(Level.SEVERE, null, ex);
+
+                    if (español) {
+                        JOptionPane.showMessageDialog(this, "Al parecer no hay internet",
+                                "Alerta", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "It seems there is not internet",
+                                "Warning", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                }
+            // }
+        } catch (NumberFormatException e) {
+            if (español) {
+                JOptionPane.showMessageDialog(this, "Revise que haya rellenado todos los campos correctamente",
+                        "Alerta", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Check if all fields are filled correctly ",
+                        "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+        } finally {
+            /*TFin = System.currentTimeMillis(); //Tomamos la hora en que finalizó el algoritmo y la almacenamos en la variable T
+                tiempo = TFin - TInicio;
+                System.out.println("Calculo terminado, tiempo:" +  tiempo );*/
         }
     }
 
@@ -1502,7 +1524,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private javax.swing.JButton agrega_button;
     private javax.swing.JLabel bonificacion_lb;
     private javax.swing.JTextField bonificacion_txt;
-    private javax.swing.JButton calculaTodo_button;
     private javax.swing.JButton calcula_button;
     private javax.swing.JComboBox<String> calidad_box;
     private javax.swing.JButton cambia_idioma;
