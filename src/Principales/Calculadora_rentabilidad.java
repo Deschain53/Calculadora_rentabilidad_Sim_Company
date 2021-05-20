@@ -20,7 +20,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import clases.LeeJSON;
-import clases.MuestraBarraProgreso;
 import clases.NombresPEN;
 import clases.ProductObjectIndependent;
 import frames.DetalleProductos;
@@ -715,7 +714,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private void informacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_informacionActionPerformed
         if (español) {
             JOptionPane.showMessageDialog(this, "                          "
-                    + "Version 1.3.0 \n"
+                    + "Version 1.3.3 \n"
                     + "Creado por: Jorge Adrián Lucas Sánchez \n"
                     + "Nick: Lucas Engines \n"
                     + "Programa creado para uso personal del autor,\n"
@@ -723,7 +722,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                     + "usos o fines que se le pueda dar.", "Acerca de", JOptionPane.PLAIN_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "                          "
-                    + "Version 1.3.0 \n"
+                    + "Version 1.3.3 \n"
                     + "Created by: Jorge Adrián Lucas Sánchez \n"
                     + "Nick: Lucas Engines \n"
                     + "Program created for personal use, \n"

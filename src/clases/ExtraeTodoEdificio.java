@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import clases.ProductObject;
-import frames.BarraProgreso;
+
 
 //Extrae la información del mercado de cada producto de un edificio
 public class ExtraeTodoEdificio {

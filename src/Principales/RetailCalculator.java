@@ -19,7 +19,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import clases.LeeJSON;
-import clases.MuestraBarraProgreso;
+
 import clases.NombresPEN;
 import clases.ProductObjectIndependent;
 import frames.DetalleProductos;

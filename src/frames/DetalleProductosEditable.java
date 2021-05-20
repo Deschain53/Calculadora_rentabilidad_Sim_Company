@@ -43,6 +43,7 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
         //this.setTitle("Detalle de productos");
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);    
+        descuento_txt.setText("0");
         nPEN = new NombresPEN();
     }
 
@@ -59,6 +60,7 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
             salarios_lb.setText("Salarios:   $");
             costoFab_lb.setText("Costo total de fabricación:   $");
             recalcular_button.setText("Recalcular");
+            descuento_txt.setText("Aplicar descuento:");
         }else{
             super.setTitle("Cost price in detail");
             ctmp.setText("Total cost of items:   $");
@@ -67,6 +69,7 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
             salarios_lb.setText("Wages:   $");
             costoFab_lb.setText("Total manufacturing cost:   $");
             recalcular_button.setText("Recalculate");
+            descuento_txt.setText("Apply discount:");
         }
     }
     
@@ -254,6 +257,9 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
         costoFab_txt = new javax.swing.JTextField();
         recalcular_button = new javax.swing.JButton();
         Q_lb = new javax.swing.JLabel();
+        descuento_txt = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        descuento_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -322,15 +328,53 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
         Q_lb.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         Q_lb.setText("Q0");
 
+        descuento_txt.setText("jTextField1");
+        descuento_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descuento_txtActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("%");
+
+        descuento_button.setText("Aplicar descuento:");
+        descuento_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descuento_buttonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(salarios_lb)
+                            .addComponent(gastosAdmin_lb)
+                            .addComponent(costoFab_lb)
+                            .addComponent(ctmp))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(costoFinla_txt)
+                            .addComponent(salarios_txt)
+                            .addComponent(gastosAdmin_txt)
+                            .addComponent(costoFab_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(descuento_button, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(descuento_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3)
+                                .addGap(49, 49, 49)
+                                .addComponent(recalcular_button))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(paf_lb)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -338,23 +382,7 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(Q_lb))
                             .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(recalcular_button)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(salarios_lb)
-                                    .addComponent(gastosAdmin_lb)
-                                    .addComponent(costoFab_lb)
-                                    .addComponent(ctmp))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(costoFinla_txt)
-                                    .addComponent(salarios_txt)
-                                    .addComponent(gastosAdmin_txt)
-                                    .addComponent(costoFab_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -368,7 +396,11 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(recalcular_button)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(recalcular_button)
+                    .addComponent(descuento_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(descuento_button))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -406,6 +438,43 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
         muestraTodo();         
         
     }//GEN-LAST:event_recalcular_buttonActionPerformed
+
+    private void descuento_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descuento_buttonActionPerformed
+       try{
+        DefaultTableModel tb = (DefaultTableModel) tablaP.getModel();   
+        DefaultTableModel tbAux = tb;
+        float porcentaje = Float.parseFloat(descuento_txt.getText());
+        
+        for (int i = 0; i < tb.getRowCount(); i++) {
+            float precio;
+            int codMP = materia_prima.getIDmateria(i);            
+            if(calidad_a_producir == 0){
+                precio = allP[codMP].getPrecio(0);
+            }else{
+                precio= allP[codMP].getPrecio(calidad_a_producir -1);
+            }
+            //Object valorO = tb.getValueAt(i, 2);
+            //float valor = Float.parseFloat(valorO.toString());  
+            float valorNew = precio*(1-porcentaje/100);
+           tbAux.setValueAt(valorNew, i, 2);          
+        }        
+        
+        tablaP.setModel(tbAux);
+        recalcula();      
+       }catch(NumberFormatException e){
+            if (espanol) {
+                JOptionPane.showMessageDialog(this, "Revise que el porcentaje sea un numero",
+                        "Alerta", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Check that the porcentaje is really a number",
+                        "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+       }
+    }//GEN-LAST:event_descuento_buttonActionPerformed
+
+    private void descuento_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descuento_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_descuento_txtActionPerformed
 
     public void recalcula(){
                     try {
@@ -510,9 +579,12 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
     private javax.swing.JTextField costoFab_txt;
     private javax.swing.JTextField costoFinla_txt;
     private javax.swing.JLabel ctmp;
+    private javax.swing.JButton descuento_button;
+    private javax.swing.JTextField descuento_txt;
     private javax.swing.JLabel gastosAdmin_lb;
     private javax.swing.JTextField gastosAdmin_txt;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel paf_lb;
     private javax.swing.JLabel producto_lb;
