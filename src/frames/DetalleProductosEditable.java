@@ -31,7 +31,7 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
     private float salarioUnidad;
     private float costoFab;
     private float abundancia;
-    private float newPrecio;
+    //private float newPrecio;
     NombresPEN nPEN;
     
     //private String nombreProducto;
@@ -60,7 +60,7 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
             salarios_lb.setText("Salarios:   $");
             costoFab_lb.setText("Costo total de fabricación:   $");
             recalcular_button.setText("Recalcular");
-            descuento_txt.setText("Aplicar descuento:");
+            descuento_button.setText("Aplicar descuento:");
         }else{
             super.setTitle("Cost price in detail");
             ctmp.setText("Total cost of items:   $");
@@ -69,7 +69,7 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
             salarios_lb.setText("Wages:   $");
             costoFab_lb.setText("Total manufacturing cost:   $");
             recalcular_button.setText("Recalculate");
-            descuento_txt.setText("Apply discount:");
+            descuento_button.setText("Apply discount:");
         }
     }
     
@@ -183,8 +183,8 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
     
     
     private void calculaSalarioUnidad(){
-        float produccionHoraBonificada = (bonificacion / 100 + 1) * materia_prima.getProduccionHora() *(materia_prima.getAbundancia()/100);
-        salarioUnidad = ( materia_prima.getSalarioEdificio()/produccionHoraBonificada);   
+        float produccionHoraBonificada = (bonificacion / 100 + 1) * materia_prima.getProduccionHora() *(abundancia/100);
+        salarioUnidad = ( salarioEdificio/produccionHoraBonificada);   
         //System.out.println("produccio hora boni: " + produccionHoraBonificada + "  salario unidad:  "  + salarioUnidad) ;
         
     }
@@ -231,7 +231,16 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
     public float getNewPrecio(){
         return costoFab;
     }
+
+    public float getSalarioEdificio() {
+        return salarioEdificio;
+    }
+
+    public void setSalarioEdificio(float salarioEdificio) {
+        this.salarioEdificio = salarioEdificio;
+    }
    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -460,7 +469,8 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
         }        
         
         tablaP.setModel(tbAux);
-        recalcula();      
+        recalcula();
+        muestraTodo(); 
        }catch(NumberFormatException e){
             if (espanol) {
                 JOptionPane.showMessageDialog(this, "Revise que el porcentaje sea un numero",
@@ -470,6 +480,8 @@ public class DetalleProductosEditable extends javax.swing.JFrame {
                         "Warning", JOptionPane.WARNING_MESSAGE);
             }
        }
+         
+       
     }//GEN-LAST:event_descuento_buttonActionPerformed
 
     private void descuento_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descuento_txtActionPerformed

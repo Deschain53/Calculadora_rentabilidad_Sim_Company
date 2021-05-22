@@ -129,17 +129,14 @@ public class ProductObject {
     
     //De prueba, obtiene el precio promedia de la calidad
     public double getPrecioPromedio(){
-        //JSONArray ja =   jsonObjectProducto.getJSONArray("retailData");
         int tamaño =  jsonObjectProducto.getJSONArray("retailData").length();//ja.length(); 
-       // System.out.println("El tamaño es: " + tamaño);
         return jsonObjectProducto.getJSONArray("retailData").getJSONObject(tamaño-1).getDouble("averagePrice");
     }
     
     //Metodo para filtrar la informacion del String y obtener los valores A,B,C,D y S0
     public void extraeLetras(){
         letras  = new double[7];
-        String ecuacion = getRetailModeling();
-        
+        String ecuacion = getRetailModeling();       
         //System.out.println(ecuacion);
         
         int index1Multi = ecuacion.indexOf("*");     
@@ -186,7 +183,7 @@ public class ProductObject {
     }  
     
     //Metodos para comunicacion con tabla A//************************************************
-    public void setSalarioEdificio(float salarioEdif){
+    /*public void setSalarioEdificio(float salarioEdif){
         this.salarioEdificio = salarioEdif;
     } 
     
@@ -247,5 +244,5 @@ public class ProductObject {
     }
     
     public float getAbundancia(){ return abundancia;}
-    
+    */
 }

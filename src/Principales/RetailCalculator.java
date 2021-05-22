@@ -6,6 +6,7 @@
 package Principales;
 
 import clases.CalculoRetail;
+import clases.DatosEntrantesCalcu;
 import clases.ExtraeTodoEdificio;
 import clases.ProductObject;
 import java.io.IOException;
@@ -56,16 +57,14 @@ public class RetailCalculator extends javax.swing.JFrame {
     int lastEdificioD = -1;   //Guarda el index del ultimo edificio que esta en la tablaD
     String[] nombresEdificio = null;
     ExtraeTodoEdificio etf;
-    ProductObject[] po = new ProductObject[200];
-    //;
+    ProductObject[] po ;
     ExtraeTodoEdificio[] etfT = new ExtraeTodoEdificio[edificios_code.length];
-    //;
     int maxCalidad = 7;
     boolean español;
     boolean calculado;
     boolean calculado_todo;
     int indexL = -1;    //El index para los Frame de información
-    //DefaultTableModel modeloBasic;
+
     DefaultTableModel modeloAvanzado;
     Vector nCes_vector;
     Vector nCEN_vector;
@@ -76,10 +75,8 @@ public class RetailCalculator extends javax.swing.JFrame {
     ArrayList<Integer> calidad_list = new ArrayList<Integer>();
     CalculoRetail cr;
 
-    //ArrayList<DetalleProductosEditable> dpe = new ArrayList<DetalleProductosEditable>();
-    //ProductObjectIndependent[] poi= new ProductObjectIndependent[200];
-    // int seg;
-    //float[][] costo;
+    ArrayList<DatosEntrantesCalcu> dec = new ArrayList<DatosEntrantesCalcu>();
+
     public RetailCalculator() {
         initComponents();
         devuelveVentanaInicial();
@@ -114,9 +111,14 @@ public class RetailCalculator extends javax.swing.JFrame {
             nCEN_vector.add(nombreColumnas_EN[i]);
         }
         nPEN = new NombresPEN();
-        //Temporal, en lo que se agrega la calculadora avanzada********
+        po = new ProductObject[200];
+        //Temporal, en lo que se agrega la calculadora avanzada********       
+        tipoCalcu_combo.setVisible(true);
+        ocultaCalculadoraAvanzada();
         calculaTodo_button.setVisible(false);
-        tipoCalcu_combo.setVisible(false);
+    }
+
+    public void ocultaCalculadoraAvanzada() {
         odn_button.setVisible(false);
         agrega_button.setVisible(false);
         recalcula_button.setVisible(false);
@@ -124,7 +126,16 @@ public class RetailCalculator extends javax.swing.JFrame {
         elimina_button.setVisible(false);
         eliminaTodos.setVisible(false);
         tablaA.setVisible(false);
+    }
 
+    public void muestraCalculadoraAvanzada() {
+        odn_button.setVisible(true);
+        agrega_button.setVisible(true);
+        recalcula_button.setVisible(true);
+        extrae_button.setVisible(true);
+        elimina_button.setVisible(true);
+        eliminaTodos.setVisible(true);
+        tablaA.setVisible(true);
     }
 
     public void devuelveVentanaInicial() {
@@ -156,7 +167,7 @@ public class RetailCalculator extends javax.swing.JFrame {
         produciendo_q_lb = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaD = new javax.swing.JTable();
-        jLabel6 = new javax.swing.JLabel();
+        edificio_lb = new javax.swing.JLabel();
         edificios_combo = new javax.swing.JComboBox<>();
         calcula_button = new javax.swing.JButton();
         informacion = new javax.swing.JButton();
@@ -224,7 +235,7 @@ public class RetailCalculator extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Producto", "Precio de compra", "Precio promedio de venta", "Unidades/hora", "Ganancia/hora  Mercado"
+                "Producto", "Precio de compra", "Precio promedio de venta", "Unidades/hora", "Ganancia/hora"
             }
         ));
         tablaD.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -246,7 +257,7 @@ public class RetailCalculator extends javax.swing.JFrame {
             tablaD.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        jLabel6.setText("Edificio:");
+        edificio_lb.setText("Edificio:");
 
         edificios_combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         edificios_combo.addActionListener(new java.awt.event.ActionListener() {
@@ -312,11 +323,11 @@ public class RetailCalculator extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Producto", "Costo", "Precio en mercado", "Unidades/hora", "Ganancia/hora Mercado", "Ganancia/hora contratos"
+                "Producto", "Precio de compra", "Precio de venta", "Unidades/hora", "Ganancia/hora"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true
+                false, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -341,7 +352,6 @@ public class RetailCalculator extends javax.swing.JFrame {
             tablaA.getColumnModel().getColumn(2).setResizable(false);
             tablaA.getColumnModel().getColumn(3).setResizable(false);
             tablaA.getColumnModel().getColumn(4).setResizable(false);
-            tablaA.getColumnModel().getColumn(5).setResizable(false);
         }
 
         recalcula_button.setText("Recalcula");
@@ -453,7 +463,7 @@ public class RetailCalculator extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(nivel_edificio_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel6)
+                                .addComponent(edificio_lb)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(edificios_combo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, Short.MAX_VALUE)
@@ -496,7 +506,7 @@ public class RetailCalculator extends javax.swing.JFrame {
                                 .addComponent(extrae_button))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(calculaTodo_button)
-                                .addGap(56, 56, 56)
+                                .addGap(83, 83, 83)
                                 .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -523,7 +533,7 @@ public class RetailCalculator extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(nivel_edificio_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(nivel_edificio_lb)
-                                .addComponent(jLabel6))
+                                .addComponent(edificio_lb))
                             .addComponent(edificios_combo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -611,18 +621,27 @@ public class RetailCalculator extends javax.swing.JFrame {
     }//GEN-LAST:event_calidad_boxActionPerformed
 
     private void calcula_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcula_buttonActionPerformed
-        seleccionaFase();
         System.out.println("cargando............");
-        /*long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecución
-        TInicio = System.currentTimeMillis();*/
+        long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecución
+        TInicio = System.currentTimeMillis();
+        
+        cleanTabla();       
+        int index = edificios_combo.getSelectedIndex();
+        calcula_edificio(index);
+        newCalcula();
+        
+        TFin = System.currentTimeMillis(); //Tomamos la hora en que finalizó el algoritmo y la almacenamos en la variable T
+        tiempo = TFin - TInicio;
+        System.out.println("Calculo terminado, tiempo:" + tiempo);
+    }//GEN-LAST:event_calcula_buttonActionPerformed
 
+    private void calcula_edificio(int index) {
         try {
-            //nPEN.getPerdidos();///Para pruebas
+            seleccionaFase();
             leeDatosLocales();
-            cleanTabla();
             try {
-                seleccionaFase();
-                int index = edificios_combo.getSelectedIndex();
+                //seleccionaFase();
+
                 etf = new ExtraeTodoEdificio(edificios_code[index]);
                 etf.setNumeroEdificio(index);
                 etf.setUrlEconomia(fase);
@@ -633,22 +652,13 @@ public class RetailCalculator extends javax.swing.JFrame {
                 etfT[index].extraeVende();
                 po = etfT[index].getProducObjectArray();
 
-                //Aqui se podria eficientar paraque consuma menos recursos ya que  /******************
-                // int [] codigos = etf.getProduceCodigos();
-                for (int i = 0; i < po.length; i++) {  // i <etf.codigos.length  o i < etf.NumeroManejaT
-                    //int codigo actual = codigos[i];
-                    if (po[i] != null) {  //po[codigo actual]
-                        //po[codigo actual].actualizaPrecios();
-                        po[i].actualizaPrecios();  //Leyendo los precios mas recientes del mercado
-                        //if (nPEN.getNamePEN(po[i].getId()) != null) {
-                        //po[i].setName(nPEN.getNamePEN(po[i].getId()));
-                        //System.out.println("Para " + po[i].getNombre()+ " --> " + po[i].getName() );
-                        //}
+                for (int i = 0; i < etfT[index].getNumeroVende(); i++) {  // i <etf.codigos.length  o i < etf.NumeroManejaT
+                    if (po[etfT[index].getCodigoVendeNumero(i)] != null) {  //po[codigo actual]
+                        po[etfT[index].getCodigoVendeNumero(i)].actualizaPrecios();  //Leyendo los precios mas recientes del mercado
                     }
                 }
-
-                newCalcula();
-
+                lastEdificioD = index;
+                calculado = true;
             } catch (IOException ex) {
                 Logger.getLogger(RetailCalculator.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -670,14 +680,8 @@ public class RetailCalculator extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Check that all fields are filled correctly ",
                         "Warning", JOptionPane.WARNING_MESSAGE);
             }
-        } finally {
-            /*TFin = System.currentTimeMillis(); //Tomamos la hora en que finalizó el algoritmo y la almacenamos en la variable T
-                tiempo = TFin - TInicio;
-                System.out.println("Calculo terminado, tiempo:" +  tiempo );*/
         }
-        calculado = true;
-
-    }//GEN-LAST:event_calcula_buttonActionPerformed
+    }
 
     private void leeDatosLocales() {
         bonificacion_ventas = Float.parseFloat(bonificacion_txt.getText());
@@ -729,6 +733,7 @@ public class RetailCalculator extends javax.swing.JFrame {
                 calcula_button.setText("Calculate");
                 idioma_lb.setText("Languaje:");
                 R_button.setText("Recession");
+                edificio_lb.setText("Building:");
                 calculaTodo_button.setText("Add all product building");
                 agrega_button.setText("Add product");
                 elimina_button.setText("Delete product");
@@ -738,13 +743,13 @@ public class RetailCalculator extends javax.swing.JFrame {
                 recalculaTablaB_button.setText("Recalculate");
                 precio_promedio_jrb.setText("Average price");
                 mejor_precio_jrb.setText("Best price");
-                
-                if(precio_promedio_jrb.isSelected()){
-                    nombreColumnas_EN[2] = "Average sell price" ;
-                }else{
-                    nombreColumnas_EN[2] = "Best price to sell" ;
+
+                if (precio_promedio_jrb.isSelected()) {
+                    nombreColumnas_EN[2] = "Average sell price";
+                } else {
+                    nombreColumnas_EN[2] = "Best price to sell";
                 }
-                
+
                 edificios_combo.setModel(new DefaultComboBoxModel(edificios_nombres_EN));
                 tipoCalcu_combo.setModel(new DefaultComboBoxModel(tipoCalcu_EN));
                 mD.setColumnIdentifiers(nombreColumnas_EN);
@@ -774,6 +779,7 @@ public class RetailCalculator extends javax.swing.JFrame {
                 odn_button.setText("Obtener datos de calculadora normal");
                 recalcula_button.setText("Recalcula");
                 R_button.setText("Recesión");
+                edificio_lb.setText("Edificio:");
                 calculaTodo_button.setText("Agregar todos los productos del edificio");
                 agrega_button.setText("Agregar producto");
                 elimina_button.setText("Eliminar producto");
@@ -783,13 +789,13 @@ public class RetailCalculator extends javax.swing.JFrame {
                 recalculaTablaB_button.setText("Recalcula");
                 precio_promedio_jrb.setText("Precio promedio");
                 mejor_precio_jrb.setText("Mejor precio");
-                
-                                            if(precio_promedio_jrb.isSelected()){
-                nombreColumnas_es[2] = "Precio promedio de venta" ;
-            }else{
-                nombreColumnas_es[2] = "Mejor precio de venta" ;
-            }
-                
+
+                if (precio_promedio_jrb.isSelected()) {
+                    nombreColumnas_es[2] = "Precio promedio de venta";
+                } else {
+                    nombreColumnas_es[2] = "Mejor precio de venta";
+                }
+
                 edificios_combo.setModel(new DefaultComboBoxModel(edificios_nombres_es));
                 tipoCalcu_combo.setModel(new DefaultComboBoxModel(tipoCalcu_es));
                 mD.setColumnIdentifiers(nombreColumnas_es);
@@ -844,67 +850,22 @@ public class RetailCalculator extends javax.swing.JFrame {
 
     private void calculaTodo_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculaTodo_buttonActionPerformed
 
-        //System.out.println("Calculando todos los datos del edificio");
-        /*long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecución
-        TInicio = System.currentTimeMillis();*/
-        try {
-            leeDatosLocales();
-            cleanTabla();
+        System.out.println("Calculando todos los datos del edificio");
+        long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecución
+        TInicio = System.currentTimeMillis();
 
-            try {
-                //po = new ProductObject[200];
-
-                etfT = new ExtraeTodoEdificio[edificios_code.length];
-
-                for (int i = 0; i < edificios_code.length; i++) {
-                    etfT[i] = new ExtraeTodoEdificio(edificios_code[i]);
-                    etfT[i].setUrlEconomia(fase);
-                    etfT[i].setProductObject(po);
-                    etfT[i].extraeProduce();
-                    po = etfT[i].getProducObjectArray();
-
-                    for (int j = 0; j < po.length; j++) {
-                        if (po[j] != null) {
-                            po[j].actualizaPrecios();
-                        }
-                    }
-                }
-
-                etf = etfT[edificios_combo.getSelectedIndex()];
-
-                newCalcula();
-
-                calculado = true;
-                calculado_todo = true;
-
-            } catch (IOException ex) {
-                Logger.getLogger(RetailCalculator.class.getName()).log(Level.SEVERE, null, ex);
-
-                if (español) {
-                    JOptionPane.showMessageDialog(this, "Al parecer no hay internet",
-                            "Alerta", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, "It seems there is not internet",
-                            "Warning", JOptionPane.ERROR_MESSAGE);
-                }
-
-            }
-
-        } catch (NumberFormatException e) {
-            if (español) {
-                JOptionPane.showMessageDialog(this, "Revise que haya rellenado todos los campos correctamente",
-                        "Alerta", JOptionPane.WARNING_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Check that all fields are filled correctly ",
-                        "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-        } finally {
-            /*TFin = System.currentTimeMillis(); //Tomamos la hora en que finalizó el algoritmo y la almacenamos en la variable T
-                tiempo = TFin - TInicio;
-                System.out.println("Calculo terminado, tiempo:" +  tiempo );*/
+        for (int i = 0; i < edificios_combo.getItemCount(); i++) {
+            calcula_edificio(i);       
         }
+        etf = etfT[edificios_combo.getSelectedIndex()];
+        newCalcula();
+        
+        TFin = System.currentTimeMillis(); //Tomamos la hora en que finalizó el algoritmo y la almacenamos en la variable T
+        tiempo = TFin - TInicio;
+        System.out.println("Calculo terminado, tiempo:" +  tiempo );
 
 
+        
     }//GEN-LAST:event_calculaTodo_buttonActionPerformed
 
     private void tipoCalcu_comboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoCalcu_comboActionPerformed
@@ -957,9 +918,8 @@ public class RetailCalculator extends javax.swing.JFrame {
 
 
     private void odn_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_odn_buttonActionPerformed
-
         if (etfT[edificios_combo.getSelectedIndex()] != null) {
-            for (int i = 0; i < etfT[edificios_combo.getSelectedIndex()].getNumeroManeja(); i++) {
+            for (int i = 0; i < etfT[edificios_combo.getSelectedIndex()].getNumeroVende(); i++) {
                 agregaUnProducto(i);
             }
         }
@@ -991,7 +951,6 @@ public class RetailCalculator extends javax.swing.JFrame {
     }//GEN-LAST:event_N_buttonActionPerformed
 
     private void agrega_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agrega_buttonActionPerformed
-
         int rowSelected;
         try {
             rowSelected = tablaD.getSelectedRow();
@@ -1091,14 +1050,14 @@ public class RetailCalculator extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaAKeyPressed
 
     private void mejor_precio_jrbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mejor_precio_jrbActionPerformed
-                if (calculado || calculado_todo) {
+        if (calculado || calculado_todo) {
             leeDatosLocales();
             newCalcula();
         }
     }//GEN-LAST:event_mejor_precio_jrbActionPerformed
 
     private void precio_promedio_jrbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_precio_promedio_jrbActionPerformed
-                if (calculado || calculado_todo) {
+        if (calculado || calculado_todo) {
             leeDatosLocales();
             newCalcula();
         }
@@ -1125,10 +1084,8 @@ public class RetailCalculator extends javax.swing.JFrame {
                 indiceLocal = lastEdificioD;
             }
 
-            int idProducto = etfT[indiceLocal].getCodigoProductoNumero(rowSelected);
+            int idProducto = etfT[indiceLocal].getCodigoVendeNumero(rowSelected);
             ProductObject poi = po[idProducto];
-            poi.setCalidad(calidad);
-            poi.setSalarioEdificio(etfT[indiceLocal].getSalariosHora());
             System.out.println(etfT[indiceLocal].getSalariosHora());
             DefaultTableModel mA = (DefaultTableModel) tablaA.getModel();
             Object[] fila = new Object[6];
@@ -1137,29 +1094,32 @@ public class RetailCalculator extends javax.swing.JFrame {
             fila[2] = mD.getValueAt(rowSelected, 2);
             fila[3] = mD.getValueAt(rowSelected, 3);
             fila[4] = mD.getValueAt(rowSelected, 4);
-            fila[5] = mD.getValueAt(rowSelected, 5);
             mA.addRow(fila);
-            poi.setSalarioEdificio(etfT[indiceLocal].getSalariosHora());
 
-            poi.setNumeroEdificio(indiceLocal);
-            poi.setGastosAdmin(gastos_administrativos);
-            poi.setBonificacion(bonificacion_ventas);
-
-            if (indiceLocal == 2 || indiceLocal == 6 || indiceLocal == 13) { //codigos de la cantera, mina y plataforma petrolera      
-            } else {
-                poi.setAbundancia(100);
-            }
-
-            poi.setCalidad(calidad);   //Esto se movio
             POIlist.add(poi);
-            porcentajeBM_lista.add(Float.toString(pcbm));  //De prueba
-            // System.out.println(Float.toString(pcbm));
-            //System.out.println(Float.toString(precio_transporte));
-            calidad_list.add(calidad);
+            agrega_a_lista_DEC();
 
         } catch (NumberFormatException e) {
             System.out.println("El campo esta mal " + e);
         }
+    }
+
+    private void agrega_a_lista_DEC() {
+        DatosEntrantesCalcu decAux = new DatosEntrantesCalcu();
+        decAux.setGastosAdministrativos(gastos_administrativos);
+        decAux.setBonificacion(bonificacion_ventas);
+        //decAux.setCostoTransporte(precio_transporte);
+        decAux.setFaseEconomica(fase);
+        decAux.setCalidad(calidad);
+        decAux.setPorcentaje_bajo_mercado(pcbm);
+        decAux.setNivel_edificio(nivel_edificio);
+        if (etfT[edificios_combo.getSelectedIndex()] != null) {
+            decAux.setEdificio(edificios_combo.getSelectedIndex());  //Checar esta parte
+        } else {
+            decAux.setEdificio(lastEdificioD);
+        }
+        decAux.setAbundancia(100);
+        dec.add(decAux);
     }
 
     public void recalcula() {
@@ -1167,7 +1127,7 @@ public class RetailCalculator extends javax.swing.JFrame {
             TableModel tm = tablaA.getModel();
             leeDatosLocales();
             DefaultTableModel modelo = new DefaultTableModel();
-            Object[] fila = new Object[6];
+            Object[] fila = new Object[5];
 
             if (español) {
                 modelo.setColumnIdentifiers(nombreColumnas_es);
@@ -1176,27 +1136,50 @@ public class RetailCalculator extends javax.swing.JFrame {
             }
 
             for (int i = 0; i < tm.getRowCount(); i++) {//tablaA.getRowCount()
-                ProductObject materiaActual = POIlist.get(i);   //po[codigosEdificio2[i]];
-                float ganancia_horaM;
-                float ganancia_horaC;
-                Object ph = tm.getValueAt(i, 3);
-                Object cmQ = tm.getValueAt(i, 1);
-                Object pm = tm.getValueAt(i, 2);
 
-                float ProduccionHora = Float.parseFloat(ph.toString());
-                float costoMprimaQ = Float.parseFloat(cmQ.toString());
-                float precioMercado = Float.parseFloat(pm.toString());
-                float porcentajeBM = Float.parseFloat(porcentajeBM_lista.get(i));
-                //System.out.println("El porcentaje bajo mercado es: " + porcentajeBM + " para " + i);
-                //System.out.println("El porcentaje bajo mercado es: " + precioT + " para " + i);
+                ProductObject materiaActual = POIlist.get(i);
+                //System.out.println("Para : " + materiaActual.getNombre() + " ------------------------");
 
-                fila[0] = tm.getValueAt(i, 0);
-                fila[1] = costoMprimaQ;
-                fila[2] = precioMercado;
-                fila[3] = ProduccionHora;
-                //fila[4] = ganancia_horaM;
-                //fila[5] = ganancia_horaC;
+                cr = new CalculoRetail(materiaActual.getLetras());
+                cr.setBono(dec.get(i).getBonificacion());
+                cr.setCalidad(dec.get(i).getCalidad());
+                float salariosHora = etfT[dec.get(i).getEdificio()].getSalariosHora();
+                float costo_administrativoH = salariosHora * (gastos_administrativos / 100);
+
+                Object pVo = tm.getValueAt(i, 2);
+                Object pCo = tm.getValueAt(i, 1);
+                float precioVenta = Float.parseFloat(pVo.toString());
+                float precioCompra = Float.parseFloat(pCo.toString());
+                //System.out.println("Para " + materiaActual.getNombre() + " --Precio venta: " + precioVenta + "  --Precio compra: "
+                 //       + precioCompra);
+
+                if (precioCompra < 0) {
+                    precioCompra = 0;
+                }
+                cr.setPrecio(precioVenta);
+                cr.calculaTodo();
+
+                float ventaHora = cr.getVentaHoraBonificacion();
+                float ingresos_Salarios = precioVenta - ((salariosHora + costo_administrativoH) / ventaHora);
+
+                if (español) {
+                    fila[0] = materiaActual.getNombre();
+                } else {
+                    fila[0] = nPEN.getNamePEN(materiaActual.getId()); //etf.getEdificioInfo().getJSONArray("doesProduce").getJSONObject(i).getString("name");
+                }
+
+                fila[1] = precioCompra;
+
+                fila[2] = precioVenta;
+                fila[3] = ventaHora * (dec.get(i).getNivel_edificio());
+
+                if (precioCompra == 0) {
+                    fila[4] = 0;
+                } else {
+                    fila[4] = ((precioVenta - precioCompra) * ventaHora - salariosHora - costo_administrativoH) * (dec.get(i).getNivel_edificio());
+                }
                 modelo.addRow(fila);
+
             }
 
             tablaA.setModel(modelo);
@@ -1220,7 +1203,8 @@ public class RetailCalculator extends javax.swing.JFrame {
     private void cambiaAvanzado() {
         odn_button.setVisible(true);
         RetailCalculator.super.setSize(875, 635);//877, 720);//(874, 572);  
-        tablaA.setVisible(true);
+        //tablaA.setVisible(true);
+        muestraCalculadoraAvanzada();
 
     }
 
@@ -1258,49 +1242,46 @@ public class RetailCalculator extends javax.swing.JFrame {
         };
 
         if (español) {
-            if(precio_promedio_jrb.isSelected()){
-                nombreColumnas_es[2] = "Precio promedio de venta" ;
-            }else{
-                nombreColumnas_es[2] = "Mejor precio de venta" ;
+            if (precio_promedio_jrb.isSelected()) {
+                nombreColumnas_es[2] = "Precio promedio de venta";
+            } else {
+                nombreColumnas_es[2] = "Mejor precio de venta";
             }
             modelo.setColumnIdentifiers(nombreColumnas_es);
         } else {
-            if(precio_promedio_jrb.isSelected()){
-                nombreColumnas_EN[2] = "Average sell price" ;
-            }else{
-                nombreColumnas_EN[2] = "Best price to sell" ;
+            if (precio_promedio_jrb.isSelected()) {
+                nombreColumnas_EN[2] = "Average sell price";
+            } else {
+                nombreColumnas_EN[2] = "Best price to sell";
             }
             modelo.setColumnIdentifiers(nombreColumnas_EN);
         }
 
         Object[] fila = new Object[5];
-        System.out.println("Salarios del edificio: " + etf.getSalariosHora());
-        for (int i = 0; i < etf.getNumeroManeja(); i++) {
+        for (int i = 0; i < etf.getNumeroVende(); i++) {
             ProductObject materiaActual = po[codigosEdificio[i]];
-            System.out.println("Para : " + materiaActual.getNombre() + " ------------------------");
-
             cr = new CalculoRetail(materiaActual.getLetras());
             cr.setBono(bonificacion_ventas);
             cr.setCalidad(calidad);
             float salariosHora = etf.getSalariosHora();
-            float costo_administrativoH = salariosHora * (gastos_administrativos / 100);           
+            float costo_administrativoH = salariosHora * (gastos_administrativos / 100);
             float precioVenta = 0;
             float precioCompra = materiaActual.getPrecio(calidad) * (1 - (pcbm / 100)); //El precio de acuerdo al porcentaje bajo el que se compraria   
-            if(precio_promedio_jrb.isSelected()){    
+            if (precio_promedio_jrb.isSelected()) {
                 precioVenta = (float) etf.getPrecioPromedio(materiaActual.getId());
-            }else if(mejor_precio_jrb.isSelected()){
+            } else if (mejor_precio_jrb.isSelected()) {
                 precioVenta = obtenMejorPrecio(materiaActual.getId(), calidad, etf.getSalariosHora(), gastos_administrativos, bonificacion_ventas, precioCompra);
             }
-            
+
             if (precioCompra < 0) {
                 precioCompra = 0;
             }
             cr.setPrecio(precioVenta);
             cr.calculaTodo();
-            
+
             float ventaHora = cr.getVentaHoraBonificacion();
             float ingresos_Salarios = precioVenta - ((salariosHora + costo_administrativoH) / ventaHora);
-            
+
             if (español) {
                 fila[0] = materiaActual.getNombre();
             } else {
@@ -1309,7 +1290,7 @@ public class RetailCalculator extends javax.swing.JFrame {
 
             fila[1] = precioCompra;
             fila[2] = precioVenta;
-            fila[3] = ventaHora * nivel_edificio;            
+            fila[3] = ventaHora * nivel_edificio;
             fila[4] = ((precioVenta - precioCompra) * ventaHora - salariosHora - costo_administrativoH) * nivel_edificio;
             if (precioCompra == 0) {
                 fila[4] = 0;
@@ -1346,12 +1327,12 @@ public class RetailCalculator extends javax.swing.JFrame {
             paso = precioI / 10;
         } else if (precioI >= 10 && precioI < 20) {
             paso = 1;
-        } else if(precioI >= 5 && precioI <10 ){
+        } else if (precioI >= 5 && precioI < 10) {
             paso = (float) 0.5;
-        }else{
+        } else {
             paso = (float) 0.1;
         }
-        //System.out.println("El tamaño de paso es: " + paso);
+
         cr.setPrecio(precioB);
         cr.calculaTodo();
         ventaB = cr.getVentaHoraBonificacion();
@@ -1368,23 +1349,22 @@ public class RetailCalculator extends javax.swing.JFrame {
             //System.out.println("Ganancia A: " + imsuA + "    Ganancia B = " + imsuB);
         } while (imsuA < imsuB || i == 1000);
 
-       // System.out.println("precioA: " + precioA);
-
-        precioB = precioA;    
+        // System.out.println("precioA: " + precioA);
+        precioB = precioA;
         cr.setPrecio(precioB);
         cr.calculaTodo();
         ventaB = cr.getVentaHoraBonificacion();
-        imsuB = ((precioB - precioC) * ventaB - gastos);     
+        imsuB = ((precioB - precioC) * ventaB - gastos);
         //paso = 1;
-        
-        if (precioA >50) {
+
+        if (precioA > 50) {
             paso = 1;
-        } else if(precioA >= 20  && precioA <50 ){
+        } else if (precioA >= 20 && precioA < 50) {
             paso = (float) 0.5;
-        }else{
+        } else {
             paso = (float) 0.1;
         }
-        
+
         do {
             imsuA = imsuB;
             precioA = precioB;
@@ -1396,7 +1376,7 @@ public class RetailCalculator extends javax.swing.JFrame {
             i++;
             //System.out.println("Ganancia A: " + imsuA + "    Ganancia B = " + imsuB);
         } while (imsuA < imsuB || i == 1000);
-               
+
         return precioA;
     }
 
@@ -1460,6 +1440,7 @@ public class RetailCalculator extends javax.swing.JFrame {
     private javax.swing.JButton calcula_button;
     private javax.swing.JComboBox<String> calidad_box;
     private javax.swing.JButton cambia_idioma;
+    private javax.swing.JLabel edificio_lb;
     private javax.swing.JComboBox<String> edificios_combo;
     private javax.swing.JButton eliminaTodos;
     private javax.swing.JButton elimina_button;
@@ -1469,7 +1450,6 @@ public class RetailCalculator extends javax.swing.JFrame {
     private javax.swing.JTextField gastos_administrativos_txt;
     private javax.swing.JLabel idioma_lb;
     private javax.swing.JButton informacion;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

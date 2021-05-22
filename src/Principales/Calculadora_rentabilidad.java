@@ -665,6 +665,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 porcentaje_bajoMercado = Integer.valueOf(Pvbm_txt.getText());
                 precio_transporte = Float.parseFloat(costo_transporte_txt.getText());
                 newCalcula();
+                
             }
         } catch (NumberFormatException e) {
             if (español) {
@@ -1091,9 +1092,9 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             dp2.setIdioma(español);
             int fila = tablaA.getSelectedRow();
             ProductObject productoActual = POIlist.get(fila);
-
-            int indexEdificio = productoActual.getNumeroEdificio();
             DefaultTableModel mA = (DefaultTableModel) tablaA.getModel();
+            int indexEdificio = dec.get(fila).getEdificio();
+            
             Object nombre = mA.getValueAt(fila, 0);
             dp2.setNombreProducto((String) nombre);
             dp2.setAllPO(po);
@@ -1102,6 +1103,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             dp2.setAbundancia(dec.get(fila).getAbundancia());
             dp2.setBonificacion(dec.get(fila).getBonificacion());
             dp2.setGastosAdmin(dec.get(fila).getGastosAdministrativos());
+            dp2.setSalarioEdificio(etfT[dec.get(fila).getEdificio()].getSalariosHora());
             dp2.calculaInfo();
             dp2.traduce();
             dp2.muestraTodo();
@@ -1165,10 +1167,8 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 indiceLocal = lastEdificioD;
             }
 
-            int idProducto = etfT[indiceLocal].getCodigoProductoNumero(rowSelected);
+            int idProducto = etfT[indiceLocal].getCodigoProduceNumero(rowSelected);
             ProductObject poi = po[idProducto];
-            poi.setCalidad(calidad);
-            poi.setSalarioEdificio(etfT[indiceLocal].getSalariosHora());
             System.out.println(etfT[indiceLocal].getSalariosHora());
             DefaultTableModel mA = (DefaultTableModel) tablaA.getModel();
             Object[] fila = new Object[6];
@@ -1179,19 +1179,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             fila[4] = mD.getValueAt(rowSelected, 4);
             fila[5] = mD.getValueAt(rowSelected, 5);
             mA.addRow(fila);
-            poi.setSalarioEdificio(etfT[indiceLocal].getSalariosHora());
-
-            poi.setNumeroEdificio(indiceLocal);
-            poi.setGastosAdmin(gastos_administrativos);
-            poi.setBonificacion(bonificacion_produccion);
-
-            if (indiceLocal == 2 || indiceLocal == 6 || indiceLocal == 13) { //codigos de la cantera, mina y plataforma petrolera      
-                poi.setAbundancia(abundancia);
-            } else {
-                poi.setAbundancia(100);
-            }
-
-            poi.setCalidad(calidad);   //Esto se movio
+            
             POIlist.add(poi);
             agrega_a_lista_DEC();
 
