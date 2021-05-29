@@ -19,7 +19,7 @@
     </Container>
     <Component class="javax.swing.ButtonGroup" name="fase_grupo">
     </Component>
-    <Component class="javax.swing.ButtonGroup" name="precio_option">
+    <Component class="javax.swing.ButtonGroup" name="tipo_precio">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -44,216 +44,201 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="pcbm_lb" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="Pvbm_txt" min="-2" pref="100" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
                                       <Component id="produciendo_q_lb" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="calidad_box" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="calcula_button" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="recalculaTablaB_button" min="-2" max="-2" attributes="0"/>
+                                      <Component id="calcula_button" max="32767" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="pvbm_lb" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                      <Component id="Pvbm_txt" min="-2" pref="73" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="abundancia_lb" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="abundancia_txt" min="-2" pref="56" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="abundanciaP_lb" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="recalculaTablaB_button" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="fe_lb" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="R_button" min="-2" pref="99" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="N_button" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="B_button" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="tabajandoCon_lb" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                                      <Component id="actual" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="promedio" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="nivel_edificio_lb" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="nivel_edificio_txt" min="-2" pref="57" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                      <Component id="edificio_lb" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="edificios_combo" min="-2" pref="163" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace pref="25" max="32767" attributes="0"/>
-                              <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                              <Component id="nivel_edificio_lb" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="nivel_edificio_txt" min="-2" pref="57" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="edificio_lb" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="edificios_combo" min="-2" pref="163" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace type="separate" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="administrativos_lb" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="gastos_administrativos_txt" min="-2" pref="96" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="B_button" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="N_button" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="fe_lb" min="-2" max="-2" attributes="0"/>
+                          <Component id="R_button" min="-2" pref="99" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="administrativos_lb" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="gastos_administrativos_txt" min="-2" pref="96" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="bonificacion_lb" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="bonificacion_txt" min="-2" pref="73" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel8" min="-2" pref="15" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="bonificacion_lb" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                  <Component id="bonificacion_txt" min="-2" pref="73" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="precio_promedio_jrb" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="mejor_precio_jrb" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="odn_button" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="agrega_button" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="recalcula_button" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="extrae_button" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="costo_transporte_label" min="-2" pref="99" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                              <Component id="jLabel10" min="-2" pref="13" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="costo_transporte_txt" min="-2" pref="79" max="-2" attributes="0"/>
+                              <Component id="calculaTodo_button" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
+                              <Component id="tipoCalcu_combo" min="-2" pref="223" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="idioma_lb" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="cambia_idioma" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="informacion" min="-2" pref="45" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="tipoCalcu_combo" alignment="0" min="-2" pref="248" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="idioma_lb" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cambia_idioma" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+                              <Component id="informacion" min="-2" pref="45" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="elimina_button" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="eliminaTodos" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
                   <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="agrega_button" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="odn_button" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="eliminaTodos" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="recalcula_button" min="-2" pref="143" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="extrae_button" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="elimina_button" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="R_button" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="fe_lb" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="N_button" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="B_button" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="actual" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="tabajandoCon_lb" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="promedio" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="nivel_edificio_txt" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="nivel_edificio_lb" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="edificios_combo" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
-                                  <Component id="edificio_lb" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="nivel_edificio_txt" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="nivel_edificio_lb" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="edificio_lb" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jSeparator1" max="32767" attributes="0"/>
+                          <Component id="edificios_combo" alignment="1" min="-2" pref="26" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="pvbm_lb" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="pcbm_lb" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="Pvbm_txt" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="abundancia_lb" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
-                          <Component id="abundancia_txt" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="abundanciaP_lb" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="calcula_button" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="recalculaTablaB_button" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="calidad_box" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="produciendo_q_lb" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="calcula_button" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="recalculaTablaB_button" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="fe_lb" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="R_button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="N_button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="B_button" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="gastos_administrativos_txt" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="administrativos_lb" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="gastos_administrativos_txt" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="bonificacion_txt" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="bonificacion_lb" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="costo_transporte_txt" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="costo_transporte_label" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="precio_promedio_jrb" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="mejor_precio_jrb" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cambia_idioma" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="idioma_lb" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="informacion" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="tipoCalcu_combo" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="jScrollPane2" min="-2" pref="182" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+              <Component id="jScrollPane2" min="-2" pref="195" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="agrega_button" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="odn_button" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="eliminaTodos" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="recalcula_button" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                  <Component id="extrae_button" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="elimina_button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cambia_idioma" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="idioma_lb" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="informacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="calculaTodo_button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tipoCalcu_combo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jScrollPane3" min="-2" pref="161" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="15" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="odn_button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="recalcula_button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="agrega_button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="elimina_button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="eliminaTodos" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="extrae_button" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="jScrollPane3" min="-2" pref="155" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -284,7 +269,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="bonificacion_lb">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Bonificaci&#xf3;n de producci&#xf3;n:"/>
+        <Property name="text" type="java.lang.String" value="Bonificaci&#xf3;n de venta:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="bonificacion_txt">
@@ -292,18 +277,15 @@
         <Property name="text" type="java.lang.String" value="jTextField3"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="pvbm_lb">
+    <Component class="javax.swing.JLabel" name="pcbm_lb">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Porcentaje de venta bajo mercado:"/>
+        <Property name="text" type="java.lang.String" value="Porcentaje de compra bajo mercado:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="Pvbm_txt">
       <Properties>
         <Property name="text" type="java.lang.String" value="jTextField4"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Pvbm_txtActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="calidad_box">
       <Properties>
@@ -329,7 +311,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="produciendo_q_lb">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Produciendo calidad:"/>
+        <Property name="text" type="java.lang.String" value="Vendiendo calidad:"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
@@ -342,22 +324,16 @@
         <Component class="javax.swing.JTable" name="tablaD">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="6" rowCount="0">
+              <Table columnCount="5" rowCount="0">
                 <Column editable="true" title="Producto" type="java.lang.Object"/>
-                <Column editable="true" title="Costo" type="java.lang.Object"/>
-                <Column editable="true" title="Precio en mercado" type="java.lang.Object"/>
+                <Column editable="true" title="Precio de compra" type="java.lang.Object"/>
+                <Column editable="true" title="Precio promedio de venta" type="java.lang.Object"/>
                 <Column editable="true" title="Unidades/hora" type="java.lang.Object"/>
-                <Column editable="true" title="Ganancia/hora  Mercado" type="java.lang.Object"/>
-                <Column editable="true" title="Ganancia/hora Contratos" type="java.lang.Object"/>
+                <Column editable="true" title="Ganancia/hora" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                   <Title/>
                   <Editor/>
@@ -419,22 +395,12 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="costo_transporte_label">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Costo transporte:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="costo_transporte_txt">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="calcula_button">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Dialog" size="15" style="1"/>
+          <Font name="Dialog" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Obtener datos"/>
+        <Property name="text" type="java.lang.String" value="Calcula"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="calcula_buttonActionPerformed"/>
@@ -466,11 +432,6 @@
         <Property name="text" type="java.lang.String" value="%"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel10">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="$"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="cambia_idioma">
       <Properties>
         <Property name="text" type="java.lang.String" value="Espa&#xf1;ol"/>
@@ -483,6 +444,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Idioma:"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="calculaTodo_button">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Calcula para todos los edificios"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="calculaTodo_buttonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="tipoCalcu_combo">
       <Properties>
@@ -504,9 +473,6 @@
     </Component>
     <Component class="javax.swing.JButton" name="odn_button">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Dialog" size="10" style="1"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Agregar todos"/>
       </Properties>
       <Events>
@@ -523,22 +489,16 @@
         <Component class="javax.swing.JTable" name="tablaA">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="6" rowCount="0">
+              <Table columnCount="5" rowCount="0">
                 <Column editable="false" title="Producto" type="java.lang.Object"/>
-                <Column editable="true" title="Costo" type="java.lang.Object"/>
-                <Column editable="true" title="Precio en mercado" type="java.lang.Object"/>
+                <Column editable="true" title="Precio de compra" type="java.lang.Object"/>
+                <Column editable="true" title="Precio de venta" type="java.lang.Object"/>
                 <Column editable="true" title="Unidades/hora" type="java.lang.Object"/>
-                <Column editable="true" title="Ganancia/hora Mercado" type="java.lang.Object"/>
-                <Column editable="true" title="Ganancia/hora contratos" type="java.lang.Object"/>
+                <Column editable="true" title="Ganancia/hora" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                   <Title/>
                   <Editor/>
@@ -579,9 +539,6 @@
     </Container>
     <Component class="javax.swing.JButton" name="recalcula_button">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Dialog" size="15" style="1"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Recalcula"/>
       </Properties>
       <Events>
@@ -595,9 +552,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Recesi&#xf3;n"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="R_buttonActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="N_button">
       <Properties>
@@ -624,30 +578,8 @@
         <Property name="text" type="java.lang.String" value="Fase econ&#xf3;mica:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="abundancia_lb">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Abundancia:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="abundancia_txt">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-        <Property name="requestFocusEnabled" type="boolean" value="false"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abundancia_txtActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="abundanciaP_lb">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="%"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="agrega_button">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Dialog" size="10" style="1"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Agregar producto"/>
       </Properties>
       <Events>
@@ -656,9 +588,6 @@
     </Component>
     <Component class="javax.swing.JButton" name="elimina_button">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Dialog" size="10" style="1"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Eliminar producto"/>
       </Properties>
       <Events>
@@ -667,9 +596,6 @@
     </Component>
     <Component class="javax.swing.JButton" name="eliminaTodos">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Dialog" size="10" style="1"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Elimina todos"/>
       </Properties>
       <Events>
@@ -678,9 +604,6 @@
     </Component>
     <Component class="javax.swing.JButton" name="extrae_button">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Dialog" size="10" style="1"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Extrae precio nuevo"/>
       </Properties>
       <Events>
@@ -695,32 +618,28 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="recalculaTablaB_buttonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="tabajandoCon_lb">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Trabajar con:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JRadioButton" name="actual">
+    <Component class="javax.swing.JRadioButton" name="precio_promedio_jrb">
       <Properties>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-          <ComponentRef name="precio_option"/>
+          <ComponentRef name="tipo_precio"/>
         </Property>
         <Property name="selected" type="boolean" value="true"/>
-        <Property name="text" type="java.lang.String" value="Precios actuales"/>
+        <Property name="text" type="java.lang.String" value="Precio promedio"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="precio_promedio_jrbActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JRadioButton" name="promedio">
+    <Component class="javax.swing.JRadioButton" name="mejor_precio_jrb">
       <Properties>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-          <ComponentRef name="precio_option"/>
+          <ComponentRef name="tipo_precio"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Precios promedio"/>
+        <Property name="text" type="java.lang.String" value="Mejor precio"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JSeparator" name="jSeparator1">
-      <Properties>
-        <Property name="orientation" type="int" value="1"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mejor_precio_jrbActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

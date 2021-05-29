@@ -260,7 +260,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         eliminaTodos = new javax.swing.JButton();
         extrae_button = new javax.swing.JButton();
         recalculaTablaB_button = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        tabajandoCon_lb = new javax.swing.JLabel();
         actual = new javax.swing.JRadioButton();
         promedio = new javax.swing.JRadioButton();
         jSeparator1 = new javax.swing.JSeparator();
@@ -513,7 +513,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Trabajar con:");
+        tabajandoCon_lb.setText("Trabajar con:");
 
         precio_option.add(actual);
         actual.setSelected(true);
@@ -567,7 +567,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(B_button))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
+                                        .addComponent(tabajandoCon_lb)
                                         .addGap(34, 34, 34)
                                         .addComponent(actual)
                                         .addGap(18, 18, 18)
@@ -643,7 +643,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(actual)
-                                    .addComponent(jLabel1)
+                                    .addComponent(tabajandoCon_lb)
                                     .addComponent(promedio))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -825,10 +825,13 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 R_button.setText("Recession");
                 agrega_button.setText("Add product");
                 elimina_button.setText("Delete product");
-                fe_lb.setText("Economic phase");
+                fe_lb.setText("Economic phase:");
                 eliminaTodos.setText("Delete All");
                 extrae_button.setText("Get new price");
                 recalculaTablaB_button.setText("Recalculate");
+                tabajandoCon_lb.setText("Using:");
+                actual.setText("Current price");
+                promedio.setText("Average price");
                 edificios_combo.setModel(new DefaultComboBoxModel(edificios_nombres_EN));
                 tipoCalcu_combo.setModel(new DefaultComboBoxModel(tipoCalcu_EN));
                 mD.setColumnIdentifiers(nombreColumnas_EN);
@@ -862,10 +865,13 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 R_button.setText("Recesión");
                 agrega_button.setText("Agregar producto");
                 elimina_button.setText("Eliminar producto");
-                fe_lb.setText("Fase económica");
+                fe_lb.setText("Fase económica:");
                 eliminaTodos.setText("Elimina todos");
                 extrae_button.setText("Extrae precio nuevo");
                 recalculaTablaB_button.setText("Recalcula");
+                tabajandoCon_lb.setText("Trabajar con:");
+                actual.setText("Precios actuales");
+                promedio.setText("Precios promedio");                
                 edificios_combo.setModel(new DefaultComboBoxModel(edificios_nombres_es));
                 tipoCalcu_combo.setModel(new DefaultComboBoxModel(tipoCalcu_es));
                 mD.setColumnIdentifiers(nombreColumnas_es);
@@ -1645,7 +1651,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private javax.swing.JTextField gastos_administrativos_txt;
     private javax.swing.JLabel idioma_lb;
     private javax.swing.JButton informacion;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1664,6 +1669,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private javax.swing.JLabel pvbm_lb;
     private javax.swing.JButton recalculaTablaB_button;
     private javax.swing.JButton recalcula_button;
+    private javax.swing.JLabel tabajandoCon_lb;
     private javax.swing.JTable tablaA;
     private javax.swing.JTable tablaD;
     private javax.swing.JComboBox<String> tipoCalcu_combo;
