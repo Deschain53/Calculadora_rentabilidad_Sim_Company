@@ -10,6 +10,9 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import clases.LeeJSON;
 import clases.InfoMercado;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 /**
  *
  * @author donyo
@@ -33,28 +36,48 @@ public class ProductObject {
     private float newProduccionHora;
     private float abundancia;
     private float [] preciosMaterias;
+    private float [] precioPromedio;  //Para  guardar los precios promedios 
+    private boolean isPromedio;
     //***********************Variables para la venta minorista   
     private int idProduct;
     private String url_productos = "https://www.simcompanies.com/api/v3/es/encyclopedia/resources/0/";
     private double [] letras;
-    
+    private Connection cn;
     
     public ProductObject(int numeroProducto){
        this.idProduct = numeroProducto;
         //constructor por defecto
+        precioPromedio = new float[6];
+        isPromedio = false;
+        cn = null;
     }
     
     public ProductObject(JSONObject jop){
         this.jsonObjectProducto = jop;
+        precioPromedio = new float[6];
+        isPromedio = false;
+        cn = null;
     }   
+    
     
     public JSONObject getJsonProduct(){
         return jsonObjectProducto;
     }
     
-    //Regresa el precio en mercado para cierta calidad
+    //Regresa el precio en mercado o el promedio para cierta calidad 
     public float getPrecio(int calidad){
-        return precios[calidad];
+        float precio = 0;
+        if(isPromedio){
+            if(calidad > 5){  //Porque la maxima calidad registrada es 5
+                precio = 0 ;
+            }else{    
+                precio = precioPromedio[calidad];
+            }
+        }else{
+            precio = precios[calidad];
+        }
+        
+        return  precio;
     }
     
     public void setPrecios(float[] precios){
@@ -113,6 +136,48 @@ public class ProductObject {
     public String getName(){
         return name;
     }
+    
+    //Establece si el poi es promedio o no 
+    public void setIsPromedio(boolean promedio){
+        isPromedio = promedio;
+    }
+    
+    //Establece el precio promedio para una calidad de este producto
+    public void setPrecioPromedio(int calidad, float precio){
+       precioPromedio[calidad] = precio;
+    }
+    
+    public void setPrecioPromedio(float preciosPromedio[]){
+        precioPromedio = preciosPromedio;
+    }
+    
+    public void setPrecioPromedio(float Q0, float Q1, float Q2, float Q3, float Q4, float Q5){
+        precioPromedio[0] = Q0;
+        precioPromedio[1] = Q1;
+        precioPromedio[2] = Q2;
+        precioPromedio[3] = Q3;
+        precioPromedio[4] = Q4;
+        precioPromedio[5] = Q5;
+    }
+    
+    //Los siguientes metodos son en caso que se quiera establecer conexion a base de datos pero son muy costosos, no recomendables de usar
+    //Toma el precio promedio desde una base de datos
+    public void tomaPrecioPromedioDesdeBD(){
+        
+    }
+    
+    //Para establecer conexion hacia base de datos
+    private void estableceConexion(String url, String usuario, String contrasena) throws SQLException{
+        cn = DriverManager.getConnection(url, usuario, contrasena);
+    }
+    
+    public void setConexion(Connection conexion){
+        cn = conexion;
+    }
+    
+    
+    
+    
     
     //Metodos para obtener informacion sobre venta minorista//****************************   
     public void setUrlEconomia(int fase){   //En caso que se quiera extraer de alguna fase especifica

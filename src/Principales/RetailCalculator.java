@@ -22,7 +22,6 @@ import javax.swing.table.TableColumnModel;
 import clases.LeeJSON;
 
 import clases.NombresPEN;
-import clases.ProductObjectIndependent;
 import frames.DetalleProductos;
 import frames.DetalleProductosEditable;
 import java.util.ArrayList;

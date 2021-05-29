@@ -8,6 +8,7 @@ package Principales;
 import clases.DatosEntrantesCalcu;
 import clases.ExtraeTodoEdificio;
 import clases.JSONedificiosProduccion;
+import clases.JSONproductos;
 import clases.ProductObject;
 import java.io.IOException;
 import java.util.Vector;
@@ -21,9 +22,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import clases.LeeJSON;
 import clases.NombresPEN;
-import clases.ProductObjectIndependent;
 import frames.DetalleProductos;
 import frames.DetalleProductosEditable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JTable;
@@ -37,61 +42,69 @@ import org.json.JSONObject;
 public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
     //Proxima actualizaion: cambiar porcentaje de venta a mercado de int a float, corregir metodo recalcula() , agregar boton "Eliminar" y hacer testeo general
-    public String[] edificios_nombres_es = {"Plantación", "Planta de concreto", "Cantera",
+    private String[] edificios_nombres_es = {"Plantación", "Planta de concreto", "Cantera",
         "Fábrica de construcción", "Contratista general", "Fábrica textil", "Mina", "Fábrica",
         "Fábrica de electrónicos", "Electrónica aeroespacial", "Fábrica de motores", "Fábrica de automotores", "Fábrica aeroespacial",
         "Plataforma petrolera", "Refinería", "Hangar", "Instalación de integración vertical", "Granja", "Depósito de embarque", "Embalse de agua", "Centro de investigación agrícola",
         "Laboratorio de física", "Laboratorio ganadero", "Laboratorio de química", "I+D Automotriz", "Diseño de moda",
         "Central eléctrica"};
-    public String[] edificios_nombres_EN = {"Plantation", "Concrete plant", "Quarry",
+    private String[] edificios_nombres_EN = {"Plantation", "Concrete plant", "Quarry",
         "Construction Factory", "General Contractor", "Textile Factory", "Mine", "Factory",
         "Electronics Factory", "Aerospace Electronics", "Engine Factory", "Automotive Factory", "Aerospace Factory",
         "Oil platform", "Refinery", "Hangar", "Vertical integration facility", "Farm", "Shipping deposit", "Water reservoir", "Plant research center",
         "Physics laboratory", "Breeding laboratory", "Chemestry laboratory", "Automotive R&D", "Fashion & design",
         "Power plant"};
-    public String[] edificios_code = {"P", "o", "Q", "x", "g", "T", "M", "Y", "L", "8", "D", "1", "7", "O", "R", "0", "9", "F", "S", "W",
+    private String[] edificios_code = {"P", "o", "Q", "x", "g", "T", "M", "Y", "L", "8", "D", "1", "7", "O", "R", "0", "9", "F", "S", "W",
         "p", "h", "b", "c", "a", "f", "E"};
-    String[] nombreColumnas_es = {"Producto", "Costo", "Precio en mercado", "Unidades/hora", "Ganancia/hora Mercado", "Ganancia/hora contratos"};
-    String[] nombreColumnas_EN = {"Product", "Cost", "Market price", "Units/hour", "Profit/hour Market", "Profit/hour contracts"};
-    String[] tipoCalcu_es = {"Calculadora básica", "Calculadora avanzada"};
-    String[] tipoCalcu_EN = {"Basic calculator", "Advanced calculator"};
+    private String[] nombreColumnas_es = {"Producto", "Costo", "Precio en mercado", "Unidades/hora", "Ganancia/hora Mercado", "Ganancia/hora contratos"};
+    private String[] nombreColumnas_EN = {"Product", "Cost", "Market price", "Units/hour", "Profit/hour Market", "Profit/hour contracts"};
+    private String[] tipoCalcu_es = {"Calculadora básica", "Calculadora avanzada"};
+    private String[] tipoCalcu_EN = {"Basic calculator", "Advanced calculator"};
 
-    float bonificacion_produccion = 0;
-    int nivel_edificio = 0;
-    float gastos_administrativos = 0;
-    float porcentaje_bajoMercado = 0;
-    float precio_transporte = 0;
-    int calidad = 0;
-    int[] codigosEdificio = null;
-    int lastEdificioD = -1;   //Guarda el index del ultimo edificio que esta en la tablaD
-    String[] nombresEdificio = null;
-    ExtraeTodoEdificio etf;
-    ProductObject[] po = new ProductObject[200];
+    private float bonificacion_produccion = 0;
+    private int nivel_edificio = 0;
+    private float gastos_administrativos = 0;
+    private float porcentaje_bajoMercado = 0;
+    private float precio_transporte = 0;
+    private int calidad = 0;
+    private int[] codigosEdificio = null;
+    private int lastEdificioD = -1;   //Guarda el index del ultimo edificio que esta en la tablaD
+    private String[] nombresEdificio = null;
+    private ExtraeTodoEdificio etf;
+    private ProductObject[] po;
     //;
-    ExtraeTodoEdificio[] etfT = new ExtraeTodoEdificio[edificios_code.length];
+    private ExtraeTodoEdificio[] etfT = new ExtraeTodoEdificio[edificios_code.length];
     //;
-    int maxCalidad = 7;
-    boolean español;
-    boolean calculado;
-    boolean calculado_todo;
-    int indexL = -1;    //El index para los Frame de información
+    private int maxCalidad = 7;
+    private boolean español;
+    private boolean calculado;
+    private boolean calculado_todo;
+    private int indexL = -1;    //El index para los Frame de información
 
-    DefaultTableModel modeloAvanzado;
-    Vector nCes_vector;
-    Vector nCEN_vector;
-    DetalleProductos dp;
-    DetalleProductosEditable dp2;
-    int fase = 1;
-    float abundancia;
-    NombresPEN nPEN;
-    JSONedificiosProduccion jep;
-    ArrayList<ProductObject> POIlist = new ArrayList<ProductObject>(); // Para guardar lo de la tabla dos
-    int investigaciones;
+    private DefaultTableModel modeloAvanzado;
+    private Vector nCes_vector;
+    private Vector nCEN_vector;
+    private DetalleProductos dp;
+    private DetalleProductosEditable dp2;
+    private int fase = 1;
+    private float abundancia;
+    private NombresPEN nPEN;
+    private JSONedificiosProduccion jep;
+    private JSONproductos  jp;
+    private ArrayList<ProductObject> POIlist = new ArrayList<ProductObject>(); // Para guardar lo de la tabla dos
+    private int investigaciones;
+    private int xFrame;
 
-    ArrayList<DatosEntrantesCalcu> dec = new ArrayList<DatosEntrantesCalcu>();  //Lista de objeto que contiene informacion ingresada
-
+    private ArrayList<DatosEntrantesCalcu> dec = new ArrayList<DatosEntrantesCalcu>();  //Lista de objeto que contiene informacion ingresada
+     //Para hacer la conexion;
+    private Connection cn;
+    private String usuario = "sql10415622";
+    private String url = "jdbc:mysql://sql10.freesqldatabase.com:3306/sql10415622";
+    private String contrasena = "wCH5k18SGz";
+    
     public Calculadora_rentabilidad() {
         initComponents();
+        xFrame = 795;
         devuelveVentanaInicial();
         //this.setSize(875, 412);    ///(874, 485);        //(790, 485);880, 670)
         this.setResizable(true); //*************************devolver a false despues
@@ -113,6 +126,8 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         abundancia_lb.setVisible(false);
         abundanciaP_lb.setVisible(false);
         abundancia_txt.setVisible(false);
+        abundancia_txt.setSize(73, 24);
+        Pvbm_txt.setSize(73, 24);
         dp = new DetalleProductos(español);
         dp2 = new DetalleProductosEditable(español);
         modeloAvanzado = new DefaultTableModel() {
@@ -131,16 +146,19 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         }
         nPEN = new NombresPEN();
         jep = new JSONedificiosProduccion();
+        jp = new JSONproductos();
         investigaciones = 20;
         ocultaBotonesCalculadoraAvanzada();
+        cn = null;
+        po = new ProductObject[200];
 
     }
 
     private void devuelveVentanaInicial() {
-        Calculadora_rentabilidad.super.setSize(875, 412);//875, 412);
+        Calculadora_rentabilidad.super.setSize(xFrame, 385);//875, 412);//875, 412);
     }
 
-    private void ocultaBotonesCalculadoraAvanzada(){
+    private void ocultaBotonesCalculadoraAvanzada() {
         odn_button.setVisible(false);
         agrega_button.setVisible(false);
         recalcula_button.setVisible(false);
@@ -148,9 +166,10 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         elimina_button.setVisible(false);
         eliminaTodos.setVisible(false);
         tablaA.setVisible(false);
+
     }
-    
-    private void muestraBotonesCalculadoraAvanzada(){
+
+    private void muestraBotonesCalculadoraAvanzada() {
         odn_button.setVisible(true);
         agrega_button.setVisible(true);
         recalcula_button.setVisible(true);
@@ -158,34 +177,35 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         elimina_button.setVisible(true);
         eliminaTodos.setVisible(true);
         tablaA.setVisible(true);
-    }    
-    
-    private void rellenaDatosDefecto(){
-        if(gastos_administrativos_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+
+    }
+
+    private void rellenaDatosDefecto() {
+        if (gastos_administrativos_txt.getText() == null || gastos_administrativos_txt.getText().equals("")) {
             gastos_administrativos_txt.setText("50");
         }
-        
-        if(bonificacion_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+
+        if (bonificacion_txt.getText() == null || gastos_administrativos_txt.getText().equals("")) {
             bonificacion_txt.setText("0");
         }
 
-        if(costo_transporte_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+        if (costo_transporte_txt.getText() == null || gastos_administrativos_txt.getText().equals("")) {
             costo_transporte_txt.setText("0.35");
         }
 
-        if(abundancia_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+        if (abundancia_txt.getText() == null || gastos_administrativos_txt.getText().equals("")) {
             abundancia_txt.setText("100");
-        }        
-        
-        if(nivel_edificio_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
-            nivel_edificio_txt.setText("1");
-        }   
+        }
 
-        if(Pvbm_txt.getText() == null || gastos_administrativos_txt.getText().equals("")){
+        if (nivel_edificio_txt.getText() == null || gastos_administrativos_txt.getText().equals("")) {
+            nivel_edificio_txt.setText("1");
+        }
+
+        if (Pvbm_txt.getText() == null || gastos_administrativos_txt.getText().equals("")) {
             Pvbm_txt.setText("3");
-        }         
-    }    
-    
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -198,6 +218,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         fase_grupo = new javax.swing.ButtonGroup();
+        precio_option = new javax.swing.ButtonGroup();
         nivel_edificio_txt = new javax.swing.JTextField();
         nivel_edificio_lb = new javax.swing.JLabel();
         administrativos_lb = new javax.swing.JLabel();
@@ -239,6 +260,10 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         eliminaTodos = new javax.swing.JButton();
         extrae_button = new javax.swing.JButton();
         recalculaTablaB_button = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        actual = new javax.swing.JRadioButton();
+        promedio = new javax.swing.JRadioButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -266,6 +291,11 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         pvbm_lb.setText("Porcentaje de venta bajo mercado:");
 
         Pvbm_txt.setText("jTextField4");
+        Pvbm_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Pvbm_txtActionPerformed(evt);
+            }
+        });
 
         calidad_box.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5", "6", "7" }));
         calidad_box.addActionListener(new java.awt.event.ActionListener() {
@@ -357,6 +387,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             }
         });
 
+        odn_button.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
         odn_button.setText("Agregar todos");
         odn_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -401,6 +432,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             tablaA.getColumnModel().getColumn(5).setResizable(false);
         }
 
+        recalcula_button.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         recalcula_button.setText("Recalcula");
         recalcula_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -410,6 +442,11 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
         fase_grupo.add(R_button);
         R_button.setText("Recesión");
+        R_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R_buttonActionPerformed(evt);
+            }
+        });
 
         fase_grupo.add(N_button);
         N_button.setSelected(true);
@@ -428,9 +465,16 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         abundancia_lb.setText("Abundancia:");
 
         abundancia_txt.setText("jTextField1");
+        abundancia_txt.setRequestFocusEnabled(false);
+        abundancia_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abundancia_txtActionPerformed(evt);
+            }
+        });
 
         abundanciaP_lb.setText("%");
 
+        agrega_button.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
         agrega_button.setText("Agregar producto");
         agrega_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -438,6 +482,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             }
         });
 
+        elimina_button.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
         elimina_button.setText("Eliminar producto");
         elimina_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -445,6 +490,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             }
         });
 
+        eliminaTodos.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
         eliminaTodos.setText("Elimina todos");
         eliminaTodos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -452,6 +498,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             }
         });
 
+        extrae_button.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
         extrae_button.setText("Extrae precio nuevo");
         extrae_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -466,184 +513,194 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Trabajar con:");
+
+        precio_option.add(actual);
+        actual.setSelected(true);
+        actual.setText("Precios actuales");
+
+        precio_option.add(promedio);
+        promedio.setText("Precios promedio");
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(pvbm_lb)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(Pvbm_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(produciendo_q_lb)
                                         .addGap(18, 18, 18)
                                         .addComponent(calidad_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(calcula_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(calcula_button)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(recalculaTablaB_button))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(pvbm_lb)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(Pvbm_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel7)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(abundancia_lb)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(abundancia_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(abundanciaP_lb)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel7))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(recalculaTablaB_button))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(nivel_edificio_lb)
-                                .addGap(18, 18, 18)
-                                .addComponent(nivel_edificio_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(edificio_lb)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(edificios_combo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, Short.MAX_VALUE)
+                                        .addComponent(fe_lb)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(R_button, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(N_button)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(B_button))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(actual)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(promedio))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(nivel_edificio_lb)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(nivel_edificio_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(edificio_lb)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(edificios_combo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(54, 54, 54)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(B_button)
-                            .addComponent(N_button)
-                            .addComponent(fe_lb)
-                            .addComponent(R_button, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(administrativos_lb)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(gastos_administrativos_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(bonificacion_lb)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(bonificacion_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jLabel9)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(costo_transporte_label, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(costo_transporte_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(idioma_lb)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(cambia_idioma)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(informacion, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(agrega_button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(odn_button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(eliminaTodos)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(administrativos_lb)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(gastos_administrativos_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(bonificacion_lb)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(bonificacion_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(costo_transporte_label, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(costo_transporte_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(abundancia_lb)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(abundancia_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(abundanciaP_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(odn_button)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(agrega_button)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(recalcula_button)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(extrae_button))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(260, 260, 260)
-                                        .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(idioma_lb)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cambia_idioma)
-                                        .addGap(57, 57, 57)
-                                        .addComponent(informacion, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(elimina_button)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(eliminaTodos))))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(10, 10, 10)))
-                .addGap(22, 22, 22))
+                        .addComponent(recalcula_button, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(extrae_button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(elimina_button))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
+                .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(nivel_edificio_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(nivel_edificio_lb)
-                                        .addComponent(edificio_lb))
-                                    .addComponent(edificios_combo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(pvbm_lb)
-                                    .addComponent(Pvbm_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(administrativos_lb)
-                                    .addComponent(gastos_administrativos_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(bonificacion_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bonificacion_lb)
-                                    .addComponent(jLabel9))))
-                        .addGap(7, 7, 7)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(calidad_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(produciendo_q_lb)
-                                    .addComponent(calcula_button)
-                                    .addComponent(recalculaTablaB_button))
-                                .addGap(18, 18, 18))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(costo_transporte_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel10)
-                                    .addComponent(costo_transporte_label))
+                                    .addComponent(R_button)
+                                    .addComponent(fe_lb)
+                                    .addComponent(N_button)
+                                    .addComponent(B_button))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(abundancia_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(abundanciaP_lb)
-                                    .addComponent(abundancia_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(6, 6, 6))))
+                                    .addComponent(actual)
+                                    .addComponent(jLabel1)
+                                    .addComponent(promedio))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(nivel_edificio_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(nivel_edificio_lb)
+                                    .addComponent(edificios_combo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(edificio_lb)))
+                            .addComponent(jSeparator1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(pvbm_lb)
+                            .addComponent(Pvbm_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)
+                            .addComponent(abundancia_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(abundancia_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(abundanciaP_lb))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(calcula_button)
+                            .addComponent(recalculaTablaB_button)
+                            .addComponent(calidad_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(produciendo_q_lb)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(fe_lb)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(gastos_administrativos_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(administrativos_lb)
+                            .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(R_button)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bonificacion_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bonificacion_lb)
+                            .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(N_button)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(B_button)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(costo_transporte_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(costo_transporte_label)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cambia_idioma)
+                            .addComponent(idioma_lb)
+                            .addComponent(informacion))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cambia_idioma)
-                    .addComponent(idioma_lb)
-                    .addComponent(informacion)
-                    .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(odn_button)
-                    .addComponent(recalcula_button)
                     .addComponent(agrega_button)
-                    .addComponent(elimina_button)
+                    .addComponent(odn_button)
                     .addComponent(eliminaTodos)
-                    .addComponent(extrae_button))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addComponent(recalcula_button, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(extrae_button)
+                    .addComponent(elimina_button))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 15, Short.MAX_VALUE))
         );
 
         pack();
@@ -665,7 +722,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 porcentaje_bajoMercado = Integer.valueOf(Pvbm_txt.getText());
                 precio_transporte = Float.parseFloat(costo_transporte_txt.getText());
                 newCalcula();
-                
+
             }
         } catch (NumberFormatException e) {
             if (español) {
@@ -679,20 +736,30 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     }//GEN-LAST:event_calidad_boxActionPerformed
 
     private void calcula_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcula_buttonActionPerformed
-        if(calculado == true){
-           int dialogButton = 0;
-           if(español){
+        if (calculado == true) {
+            int dialogButton = 0;
+            if (español) {
                 dialogButton = JOptionPane.showConfirmDialog(null, "Volveras a tomar los datos desde internet, Estas seguro? ", "Advertencia", JOptionPane.YES_NO_OPTION);
-           }else{
+            } else {
                 dialogButton = JOptionPane.showConfirmDialog(null, "You will get the data from internet again, Are you sure?", "Warning", JOptionPane.YES_NO_OPTION);
-           }      
-        if (dialogButton == JOptionPane.YES_OPTION) {
-                calculaTodo();
             }
-       }else{
-        calculaTodo();
-        calculado = true;
-       }
+            if (dialogButton == JOptionPane.YES_OPTION) {
+
+                try {
+                    calculaTodo();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Calculadora_rentabilidad.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        } else {
+            try {
+                calculaTodo(); 
+            } catch (SQLException ex) {
+                Logger.getLogger(Calculadora_rentabilidad.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                calculado = true;
+        }
     }//GEN-LAST:event_calcula_buttonActionPerformed
 
     public void extraeInfoEdificio(int index) throws IOException {
@@ -715,7 +782,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private void informacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_informacionActionPerformed
         if (español) {
             JOptionPane.showMessageDialog(this, "                          "
-                    + "Version 1.3.3 \n"
+                    + "Version 1.4.0 \n"
                     + "Creado por: Jorge Adrián Lucas Sánchez \n"
                     + "Nick: Lucas Engines \n"
                     + "Programa creado para uso personal del autor,\n"
@@ -723,7 +790,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                     + "usos o fines que se le pueda dar.", "Acerca de", JOptionPane.PLAIN_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "                          "
-                    + "Version 1.3.3 \n"
+                    + "Version 1.4.0 \n"
                     + "Created by: Jorge Adrián Lucas Sánchez \n"
                     + "Nick: Lucas Engines \n"
                     + "Program created for personal use, \n"
@@ -857,7 +924,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
     }//GEN-LAST:event_edificios_comboActionPerformed
 
-    private void calculaTodo() {
+    private void calculaTodo() throws SQLException {
         //System.out.println("Calculando todos los datos del edificio");
         long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecución
         TInicio = System.currentTimeMillis();
@@ -873,12 +940,30 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 for (int i = 0; i < edificios_code.length; i++) {
                     extraeInfoEdificio(i);
                 }
-
-                for (int i = 0; i < po.length; i++) {
-                    if (po[i] != null) {
-                        po[i].actualizaPrecios();
+                if (actual.isSelected()) {
+                    for (int i = 0; i < po.length; i++) {
+                        if (nPEN.existe(i)) {
+                            po[i] = new ProductObject(jp.getproducto(i));
+                            po[i].actualizaPrecios();
+                        }
                     }
+                } else {
+                    try {
+                        estableceConexion( url ,usuario ,contrasena);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Calculadora_rentabilidad.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    for (int i = 0; i < po.length; i++) {
+                        if (nPEN.existe(i)) {
+                            po[i] = new ProductObject(jp.getproducto(i));
+                            po[i].setPrecioPromedio(obtenPreciosPromedioPara(i));
+                            po[i].setIsPromedio(true);
+                        }
+                    }
+
                 }
+
                 lastEdificioD = edificios_combo.getSelectedIndex();
                 etf = etfT[edificios_combo.getSelectedIndex()];
 
@@ -1094,7 +1179,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             ProductObject productoActual = POIlist.get(fila);
             DefaultTableModel mA = (DefaultTableModel) tablaA.getModel();
             int indexEdificio = dec.get(fila).getEdificio();
-            
+
             Object nombre = mA.getValueAt(fila, 0);
             dp2.setNombreProducto((String) nombre);
             dp2.setAllPO(po);
@@ -1148,11 +1233,23 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tablaAKeyPressed
 
+    private void R_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_R_buttonActionPerformed
+
+    private void abundancia_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abundancia_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_abundancia_txtActionPerformed
+
+    private void Pvbm_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Pvbm_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Pvbm_txtActionPerformed
+
     private void eliminaProducto(int indexTablaASelec) {
         DefaultTableModel mA = (DefaultTableModel) tablaA.getModel();
         mA.removeRow(indexTablaASelec);
         POIlist.remove(indexTablaASelec);
-        dec.remove(indexTablaASelec);  
+        dec.remove(indexTablaASelec);
         tablaA.setModel(mA);
     }
 
@@ -1179,7 +1276,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             fila[4] = mD.getValueAt(rowSelected, 4);
             fila[5] = mD.getValueAt(rowSelected, 5);
             mA.addRow(fila);
-            
+
             POIlist.add(poi);
             agrega_a_lista_DEC();
 
@@ -1265,7 +1362,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     }
 
     private void cambiaAvanzado() {
-        Calculadora_rentabilidad.super.setSize(875, 635);//877, 720);//(874, 572);  
+        Calculadora_rentabilidad.super.setSize(xFrame, 640);//877, 720);//(874, 572);  
         muestraBotonesCalculadoraAvanzada();
 
     }
@@ -1274,7 +1371,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         devuelveVentanaInicial();
         ocultaBotonesCalculadoraAvanzada();
         newCalcula();
-        
+
     }
 
     private void leeDatosLocales() {
@@ -1305,8 +1402,8 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             tb.removeRow(tb.getRowCount() - 1);
         }
     }
-    
-    private void calculaUno(){
+
+    private void calculaUno() {
         System.out.println("cargando............");
         /*long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecución
         TInicio = System.currentTimeMillis();*/
@@ -1315,34 +1412,34 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             //if (!calculado) {
             //    calculaTodo();
             // } else {
-                //nPEN.getPerdidos();///Para pruebas
-                leeDatosLocales();
-                cleanTabla();
-                try {
-                    seleccionaFase();
-                    int index = edificios_combo.getSelectedIndex();
-                    extraeInfoEdificio(index);
-                    etf = etfT[index];
-                    for (int i = 0; i < po.length; i++) {
-                        if (po[i] != null) {
-                            po[i].actualizaPrecios();
-                        }
+            //nPEN.getPerdidos();///Para pruebas
+            leeDatosLocales();
+            cleanTabla();
+            try {
+                seleccionaFase();
+                int index = edificios_combo.getSelectedIndex();
+                extraeInfoEdificio(index);
+                etf = etfT[index];
+                for (int i = 0; i < po.length; i++) {
+                    if (po[i] != null) {
+                        po[i].actualizaPrecios();
                     }
-                    lastEdificioD = index;
-                    newCalcula();
-
-                } catch (IOException ex) {
-                    Logger.getLogger(Calculadora_rentabilidad.class.getName()).log(Level.SEVERE, null, ex);
-
-                    if (español) {
-                        JOptionPane.showMessageDialog(this, "Al parecer no hay internet",
-                                "Alerta", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "It seems there is not internet",
-                                "Warning", JOptionPane.ERROR_MESSAGE);
-                    }
-
                 }
+                lastEdificioD = index;
+                newCalcula();
+
+            } catch (IOException ex) {
+                Logger.getLogger(Calculadora_rentabilidad.class.getName()).log(Level.SEVERE, null, ex);
+
+                if (español) {
+                    JOptionPane.showMessageDialog(this, "Al parecer no hay internet",
+                            "Alerta", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "It seems there is not internet",
+                            "Warning", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
             // }
         } catch (NumberFormatException e) {
             if (español) {
@@ -1453,6 +1550,27 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
     }
 
+    private void estableceConexion(String url, String usuario, String contrasena) throws SQLException {
+        cn = DriverManager.getConnection(url, usuario, contrasena);
+    }
+
+    private float[] obtenPreciosPromedioPara(int id) throws SQLException {
+        float[] preciosAux = new float[6];
+
+        PreparedStatement pst = null;
+        pst = cn.prepareStatement("SELECT precio_promedio_Q0,precio_promedio_Q1,precio_promedio_Q2,precio_promedio_Q3,precio_promedio_Q4,precio_promedio_Q5 FROM aproductos WHERE ID = " + id + " ;");
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            for (int i = 1; i <= 6 ; i++) {
+                preciosAux[i-1] = rs.getFloat(i);
+            }
+        }
+        pst.close();
+
+        return preciosAux;
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -1507,6 +1625,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private javax.swing.JLabel abundanciaP_lb;
     private javax.swing.JLabel abundancia_lb;
     private javax.swing.JTextField abundancia_txt;
+    private javax.swing.JRadioButton actual;
     private javax.swing.JLabel administrativos_lb;
     private javax.swing.JButton agrega_button;
     private javax.swing.JLabel bonificacion_lb;
@@ -1526,6 +1645,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private javax.swing.JTextField gastos_administrativos_txt;
     private javax.swing.JLabel idioma_lb;
     private javax.swing.JButton informacion;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1533,11 +1653,14 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel nivel_edificio_lb;
     private javax.swing.JTextField nivel_edificio_txt;
     private javax.swing.JButton odn_button;
+    private javax.swing.ButtonGroup precio_option;
     private javax.swing.JLabel produciendo_q_lb;
+    private javax.swing.JRadioButton promedio;
     private javax.swing.JLabel pvbm_lb;
     private javax.swing.JButton recalculaTablaB_button;
     private javax.swing.JButton recalcula_button;
