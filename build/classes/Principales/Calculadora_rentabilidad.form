@@ -618,6 +618,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Boom"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="B_buttonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="fe_lb">
       <Properties>

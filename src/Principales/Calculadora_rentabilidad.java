@@ -90,18 +90,20 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private float abundancia;
     private NombresPEN nPEN;
     private JSONedificiosProduccion jep;
-    private JSONproductos  jp;
+    private JSONproductos jp;
     private ArrayList<ProductObject> POIlist = new ArrayList<ProductObject>(); // Para guardar lo de la tabla dos
     private int investigaciones;
     private int xFrame;
 
     private ArrayList<DatosEntrantesCalcu> dec = new ArrayList<DatosEntrantesCalcu>();  //Lista de objeto que contiene informacion ingresada
-     //Para hacer la conexion;
+    //Para hacer la conexion;
     private Connection cn;
     private String usuario = "sql10415622";
     private String url = "jdbc:mysql://sql10.freesqldatabase.com:3306/sql10415622";
     private String contrasena = "wCH5k18SGz";
     
+    private int oldFase;
+
     public Calculadora_rentabilidad() {
         initComponents();
         xFrame = 795;
@@ -151,6 +153,8 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         ocultaBotonesCalculadoraAvanzada();
         cn = null;
         po = new ProductObject[200];
+
+        promedio.setVisible(false);
 
     }
 
@@ -459,6 +463,11 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
         fase_grupo.add(B_button);
         B_button.setText("Boom");
+        B_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                B_buttonActionPerformed(evt);
+            }
+        });
 
         fe_lb.setText("Fase económica:");
 
@@ -754,11 +763,11 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             }
         } else {
             try {
-                calculaTodo(); 
+                calculaTodo();
             } catch (SQLException ex) {
                 Logger.getLogger(Calculadora_rentabilidad.class.getName()).log(Level.SEVERE, null, ex);
             }
-                calculado = true;
+            calculado = true;
         }
     }//GEN-LAST:event_calcula_buttonActionPerformed
 
@@ -871,7 +880,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 recalculaTablaB_button.setText("Recalcula");
                 tabajandoCon_lb.setText("Trabajar con:");
                 actual.setText("Precios actuales");
-                promedio.setText("Precios promedio");                
+                promedio.setText("Precios promedio");
                 edificios_combo.setModel(new DefaultComboBoxModel(edificios_nombres_es));
                 tipoCalcu_combo.setModel(new DefaultComboBoxModel(tipoCalcu_es));
                 mD.setColumnIdentifiers(nombreColumnas_es);
@@ -943,6 +952,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
             try {
                 seleccionaFase();
+                oldFase = fase;
                 for (int i = 0; i < edificios_code.length; i++) {
                     extraeInfoEdificio(i);
                 }
@@ -955,7 +965,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                     }
                 } else {
                     try {
-                        estableceConexion( url ,usuario ,contrasena);
+                        estableceConexion(url, usuario, contrasena);
                     } catch (SQLException ex) {
                         Logger.getLogger(Calculadora_rentabilidad.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -1027,10 +1037,21 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private void seleccionaFase() {
         if (N_button.isSelected()) {
             fase = 1;
+
         } else if (R_button.isSelected()) {
             fase = 0;
         } else if (B_button.isSelected()) {
             fase = 2;
+        }
+
+        jp.setFase(fase);
+    }
+
+    private void cambiaFase(int fase) {
+        for (int i = 0; i < po.length; i++) {
+            if (nPEN.existe(i)) {
+                po[i].setJSONproducto(jp.getproducto(i));
+            }
         }
     }
 
@@ -1115,7 +1136,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaDPropertyChange
 
     private void N_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_N_buttonActionPerformed
-        // TODO add your handling code here:
+        seleccionaFase();
     }//GEN-LAST:event_N_buttonActionPerformed
 
     private void agrega_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agrega_buttonActionPerformed
@@ -1218,6 +1239,15 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
     private void recalculaTablaB_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recalculaTablaB_buttonActionPerformed
         if (calculado || calculado_todo) {
+            try {
+                if (oldFase != fase) {
+                    cambiaFase(fase);
+                    oldFase = fase;
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
             leeDatosLocales();
             cleanTabla();
             newCalcula();
@@ -1240,7 +1270,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaAKeyPressed
 
     private void R_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R_buttonActionPerformed
-        // TODO add your handling code here:
+        seleccionaFase();
     }//GEN-LAST:event_R_buttonActionPerformed
 
     private void abundancia_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abundancia_txtActionPerformed
@@ -1250,6 +1280,10 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private void Pvbm_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Pvbm_txtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Pvbm_txtActionPerformed
+
+    private void B_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_buttonActionPerformed
+        seleccionaFase();
+    }//GEN-LAST:event_B_buttonActionPerformed
 
     private void eliminaProducto(int indexTablaASelec) {
         DefaultTableModel mA = (DefaultTableModel) tablaA.getModel();
@@ -1568,8 +1602,8 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         ResultSet rs = pst.executeQuery();
 
         if (rs.next()) {
-            for (int i = 1; i <= 6 ; i++) {
-                preciosAux[i-1] = rs.getFloat(i);
+            for (int i = 1; i <= 6; i++) {
+                preciosAux[i - 1] = rs.getFloat(i);
             }
         }
         pst.close();
