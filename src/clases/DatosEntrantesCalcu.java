@@ -19,6 +19,7 @@ public class DatosEntrantesCalcu {
     private float nivel_edificio;
     private int edificio;
     private float abundancia;
+    private boolean robots;
 
     public float getAbundancia() {
         return abundancia;
@@ -96,6 +97,13 @@ public class DatosEntrantesCalcu {
         this.edificio = Edificio;
     }
     
+    public void setRobots(boolean robots){
+        this.robots = robots;
+    }
+    
+    public boolean getRobots(){
+        return robots;
+    }
     
     
     

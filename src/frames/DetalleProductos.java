@@ -29,23 +29,28 @@ public class DetalleProductos extends javax.swing.JFrame {
     private float salarioUnidad;
     private float costoFab;
     private float abundancia;
-    NombresPEN nPEN;
+    private NombresPEN nPEN;
+    
+    private float porcentajeMP; //porcntaje materias primas
+    private float porcentajeSalarios; 
+    private float porcentajeAdmin;
+    private boolean robots;
+    
     
     //private String nombreProducto;
     public DetalleProductos(boolean espanol) {
         this.espanol = espanol;
         initComponents();
-         this.setSize(400, 330);    ///(874, 485);        //(790, 485);
+         this.setSize(412, 300);    ///(874, 485);        //(790, 485); 
         this.setResizable(false);
-        //this.setTitle("Detalle de productos");
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);    
         nPEN = new NombresPEN();
+        porSalarios_lb.setText("");
+        porMP_lb.setText("");
+        porAdmin_lb.setText("");
+        robots = false;
     }
-
-    /*private DetalleProductos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
 
     public void traduce(){
         if(espanol){
@@ -85,13 +90,9 @@ public class DetalleProductos extends javax.swing.JFrame {
         this.calidad_a_producir = c;
     }
     
-   /* public void metelesIngles(){
-        for (int i = 0; i < allP.length; i++) {
-            if(allP[i] != null){
-                allP[i].setName(nPEN.getNamePEN(allP[i].getId()));
-            }
-        }
-    }*/
+    public void setRobots(boolean robots){
+        this.robots = robots;
+    }
     
     public void calculaInfo(){
         //metelesIngles();   //De prueba
@@ -108,23 +109,23 @@ public class DetalleProductos extends javax.swing.JFrame {
             modelo.setColumnIdentifiers(nombreColumnas_EN);
         }
         
-        //traduce();
         costo_totalMP = 0; 
         Object[] fila = new Object[4];   
-        //System.out.println(materia_prima.getNombre()+ "  -  " +   materia_prima.getNumeroMateriasPrimas());
-        for(int i= 0 ; i <  materia_prima.getNumeroMateriasPrimas(); i++ ){           
+        for(int i= 0 ; i <  materia_prima.getNumeroMateriasPrimas(); i++ ){   
+            
             int codMP = materia_prima.getIDmateria(i);
+            
             if(espanol){
                 fila[0] = allP[codMP].getNombre();
             }else{
                 fila[0] = allP[codMP].getNombre(); 
-                //System.out.println("cambiado a ingles, materia prima ["+i+"] = " + nPEN.getNamePEN(codMP) );
                 allP[codMP].setName(nPEN.getNamePEN(codMP));
                 fila[0] = allP[codMP].getName();     // nPEN.getNamePEN(codMP);
             }
             
             float cantidad = materia_prima.getAmount(i);
             fila[1] = cantidad;
+            
             float precio;
             if(calidad_a_producir == 0){
                 precio = allP[codMP].getPrecio(0);
@@ -146,6 +147,7 @@ public class DetalleProductos extends javax.swing.JFrame {
         muestraGastosAdmin();
         muestraSalarios();
         muestraCostoFab();
+        muestraPorcentaje();
     }
     
     public void muestraCostoTotalMP(){
@@ -174,8 +176,18 @@ public class DetalleProductos extends javax.swing.JFrame {
     
     private void calculaSalarioUnidad(){
         float produccionHoraBonificada = (bonificacion / 100 + 1) * materia_prima.getProduccionHora()*(abundancia/100);
-        salarioUnidad =  salarioEdificio /produccionHoraBonificada;   
+        float salarioEdificioR= 0 ;
+        
+        if(robots){
+            salarioEdificioR = (float) (salarioEdificio*0.97);  
+        }else{
+            salarioEdificioR = salarioEdificio;
+        }
+        
+        
+        salarioUnidad =  salarioEdificioR /produccionHoraBonificada;   
     }
+    
     public float getSalarioUnidad(){
         calculaSalarioUnidad();      
         return salarioUnidad;
@@ -198,7 +210,6 @@ public class DetalleProductos extends javax.swing.JFrame {
     }
     
     public void calculaCostoFab(){
-        //costoFab = gastosAdminUnidad + salarioUnidad + costo_totalMP;
         costoFab = getValorGastosAdmin() + getSalarioUnidad() + getValorTotalMateriasPrimas();     
     }    
     
@@ -210,6 +221,36 @@ public class DetalleProductos extends javax.swing.JFrame {
         calculaCostoFab();
         costoFab_txt.setText( Float.toString( costoFab ) );
     }
+    
+    public void muestraPorcentaje(){
+        calculaPorcentajes();
+        porSalarios_lb.setText(getPorcentajeSalarios() + "%");
+        porMP_lb.setText(getPorcentajeMP() + "%");
+        porAdmin_lb.setText(getPorcentajeAdmin()+"%");
+        /*System.out.println(  materia_prima.getNombre() + " \t " + getPorcentajeMP() + " \t " + getPorcentajeSalarios() + " \t " + 
+            getPorcentajeAdmin() );*/
+    }
+    
+    //Para calcular porcentajes una vez que se haya hecho los anteriores procesos
+    public void calculaPorcentajes(){
+        porcentajeMP = (costo_totalMP/costoFab)*100;
+        porcentajeSalarios = (salarioUnidad/costoFab)*100; 
+        porcentajeAdmin = (gastosAdminUnidad/costoFab)*100;
+    }
+    
+    public float getPorcentajeMP(){
+        return porcentajeMP;
+    }
+    
+    public float getPorcentajeSalarios(){
+        return porcentajeSalarios;
+    }
+    
+    public float getPorcentajeAdmin(){
+        return porcentajeAdmin;
+    }
+    
+    
     
     
     /**
@@ -234,6 +275,9 @@ public class DetalleProductos extends javax.swing.JFrame {
         gastosAdmin_txt = new javax.swing.JTextField();
         costoFab_lb = new javax.swing.JLabel();
         costoFab_txt = new javax.swing.JTextField();
+        porMP_lb = new javax.swing.JLabel();
+        porSalarios_lb = new javax.swing.JLabel();
+        porAdmin_lb = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -284,6 +328,15 @@ public class DetalleProductos extends javax.swing.JFrame {
         costoFab_txt.setEditable(false);
         costoFab_txt.setText("jTextField1");
 
+        porMP_lb.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        porMP_lb.setText("jLabel1");
+
+        porSalarios_lb.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        porSalarios_lb.setText("jLabel3");
+
+        porAdmin_lb.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        porAdmin_lb.setText("jLabel4");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -291,17 +344,14 @@ public class DetalleProductos extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(paf_lb)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(producto_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(paf_lb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(producto_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(ctmp)
                             .addComponent(salarios_lb)
@@ -309,11 +359,16 @@ public class DetalleProductos extends javax.swing.JFrame {
                             .addComponent(costoFab_lb))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(costoFinla_txt, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
+                            .addComponent(costoFinla_txt)
                             .addComponent(salarios_txt)
                             .addComponent(gastosAdmin_txt)
-                            .addComponent(costoFab_txt))
-                        .addGap(16, 16, 16))))
+                            .addComponent(costoFab_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(porMP_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(porSalarios_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(porAdmin_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -324,27 +379,29 @@ public class DetalleProductos extends javax.swing.JFrame {
                     .addComponent(producto_lb))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(costoFinla_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ctmp))
+                            .addComponent(ctmp)
+                            .addComponent(porMP_lb))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(salarios_lb)
-                            .addComponent(salarios_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(salarios_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(porSalarios_lb))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(gastosAdmin_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(gastosAdmin_lb))
+                            .addComponent(gastosAdmin_lb)
+                            .addComponent(porAdmin_lb))
                         .addGap(31, 31, 31))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(costoFab_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(costoFab_lb)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -401,6 +458,9 @@ public class DetalleProductos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel paf_lb;
+    private javax.swing.JLabel porAdmin_lb;
+    private javax.swing.JLabel porMP_lb;
+    private javax.swing.JLabel porSalarios_lb;
     private javax.swing.JLabel producto_lb;
     private javax.swing.JLabel salarios_lb;
     private javax.swing.JTextField salarios_txt;

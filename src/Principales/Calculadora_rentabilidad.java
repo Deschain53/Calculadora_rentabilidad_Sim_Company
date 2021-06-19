@@ -98,10 +98,10 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private ArrayList<DatosEntrantesCalcu> dec = new ArrayList<DatosEntrantesCalcu>();  //Lista de objeto que contiene informacion ingresada
     //Para hacer la conexion;
     private Connection cn;
-    private String usuario = "sql10415622";
-    private String url = "jdbc:mysql://sql10.freesqldatabase.com:3306/sql10415622";
-    private String contrasena = "wCH5k18SGz";
-    
+    private String usuario = "root"; // "sql10415622";
+    private String url = "jdbc:mysql://localhost/bd_simcompany";  //"jdbc:mysql://sql10.freesqldatabase.com:3306/sql10415622";
+    private String contrasena = "";//"wCH5k18SGz";
+
     private int oldFase;
 
     public Calculadora_rentabilidad() {
@@ -155,7 +155,6 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         po = new ProductObject[200];
 
         promedio.setVisible(false);
-
     }
 
     private void devuelveVentanaInicial() {
@@ -268,6 +267,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         actual = new javax.swing.JRadioButton();
         promedio = new javax.swing.JRadioButton();
         jSeparator1 = new javax.swing.JSeparator();
+        robots_cb = new javax.swing.JCheckBox();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -533,6 +533,18 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
+        robots_cb.setText("Robots");
+        robots_cb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                robots_cbMouseClicked(evt);
+            }
+        });
+        robots_cb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                robots_cbActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -592,45 +604,47 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(54, 54, 54)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(administrativos_lb)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(gastos_administrativos_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(bonificacion_lb)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(bonificacion_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel9)))
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(administrativos_lb)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(gastos_administrativos_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(bonificacion_lb)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(bonificacion_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jLabel9)))
+                                    .addComponent(costo_transporte_label, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(12, 12, 12)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(costo_transporte_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(costo_transporte_label, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(idioma_lb)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(costo_transporte_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(idioma_lb)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(cambia_idioma)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(informacion, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(cambia_idioma)
+                                .addGap(18, 18, 18)
+                                .addComponent(robots_cb)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(informacion))))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(agrega_button)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(odn_button)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(eliminaTodos)
                         .addGap(18, 18, 18)
+                        .addComponent(extrae_button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(recalcula_button, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(extrae_button)
+                        .addComponent(eliminaTodos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(elimina_button))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
@@ -694,7 +708,8 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cambia_idioma)
                             .addComponent(idioma_lb)
-                            .addComponent(informacion))
+                            .addComponent(informacion)
+                            .addComponent(robots_cb))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(tipoCalcu_combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -769,6 +784,8 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             }
             calculado = true;
         }
+
+
     }//GEN-LAST:event_calcula_buttonActionPerformed
 
     public void extraeInfoEdificio(int index) throws IOException {
@@ -791,7 +808,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private void informacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_informacionActionPerformed
         if (español) {
             JOptionPane.showMessageDialog(this, "                          "
-                    + "Version 1.4.0 \n"
+                    + "Version 1.4.1 \n"
                     + "Creado por: Jorge Adrián Lucas Sánchez \n"
                     + "Nick: Lucas Engines \n"
                     + "Programa creado para uso personal del autor,\n"
@@ -799,7 +816,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                     + "usos o fines que se le pueda dar.", "Acerca de", JOptionPane.PLAIN_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "                          "
-                    + "Version 1.4.0 \n"
+                    + "Version 1.4.1 \n"
                     + "Created by: Jorge Adrián Lucas Sánchez \n"
                     + "Nick: Lucas Engines \n"
                     + "Program created for personal use, \n"
@@ -819,7 +836,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             if (español) {
                 español = false;
                 super.setTitle("Sim companies profit calculator");
-                odn_button.setText("Get data from Basic calculator");
+                odn_button.setText("Add all");
                 recalcula_button.setText("Recalculate");
                 cambia_idioma.setText("English");
                 edificio_lb.setText("Building:");
@@ -869,7 +886,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 costo_transporte_label.setText("Costo transporte:");
                 calcula_button.setText("Obtener datos");
                 idioma_lb.setText("Idioma:");
-                odn_button.setText("Obtener datos de calculadora normal");
+                odn_button.setText("Agregar todos");
                 recalcula_button.setText("Recalcula");
                 R_button.setText("Recesión");
                 agrega_button.setText("Agregar producto");
@@ -1105,7 +1122,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             if (etfT[edificios_combo.getSelectedIndex()] != null) {
                 indexL = edificios_combo.getSelectedIndex();
             }
-            if (indexL > 0) {
+            if (indexL >= 0) {
                 DefaultTableModel mD = (DefaultTableModel) tablaD.getModel();
                 int fila = tablaD.getSelectedRow();
                 Object nombre = mD.getValueAt(fila, 0);
@@ -1118,12 +1135,22 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                 dp.setBonificacion(Float.parseFloat(bonificacion_txt.getText()));
                 dp.setGastosAdmin(Float.parseFloat(gastos_administrativos_txt.getText()));
                 dp.setSalario(etfT[indexL].getSalariosHora());
-                dp.calculaInfo();
+
+                if (robots_cb.isSelected()) {
+                    dp.setRobots(true);
+                } else {
+                    dp.setRobots(false);
+                }
+
+                //Aqui iba dp.calculaInfo()
                 if (indexL == 2 || indexL == 6 || indexL == 13) { //codigos de la cantera, mina y plataforma petrolera      
                     dp.setAbundancia(abundancia);
                 } else {
                     dp.setAbundancia(100);
                 }
+
+                dp.calculaInfo();
+
                 dp.traduce();
                 dp.muestraTodo();
                 dp.setVisible(true);
@@ -1216,6 +1243,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             dp2.setBonificacion(dec.get(fila).getBonificacion());
             dp2.setGastosAdmin(dec.get(fila).getGastosAdministrativos());
             dp2.setSalarioEdificio(etfT[dec.get(fila).getEdificio()].getSalariosHora());
+            dp2.setRobots(dec.get(fila).getRobots());
             dp2.calculaInfo();
             dp2.traduce();
             dp2.muestraTodo();
@@ -1261,6 +1289,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
                         "Warning", JOptionPane.WARNING_MESSAGE);
             }
         }
+
     }//GEN-LAST:event_recalculaTablaB_buttonActionPerformed
 
     private void tablaAKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablaAKeyPressed
@@ -1284,6 +1313,22 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private void B_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_buttonActionPerformed
         seleccionaFase();
     }//GEN-LAST:event_B_buttonActionPerformed
+
+    private void robots_cbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_robots_cbActionPerformed
+
+    }//GEN-LAST:event_robots_cbActionPerformed
+
+    private void robots_cbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_robots_cbMouseClicked
+        /*if (evt.getClickCount() == 1) {
+            try {
+                //if (calculado) {
+                    recalcula();
+               // }
+            } catch (Exception e) {
+                System.out.println("Error al clicker robots: " + "\n" + e);
+            }
+        }*/
+    }//GEN-LAST:event_robots_cbMouseClicked
 
     private void eliminaProducto(int indexTablaASelec) {
         DefaultTableModel mA = (DefaultTableModel) tablaA.getModel();
@@ -1336,6 +1381,12 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         decAux.setNivel_edificio(nivel_edificio);
         decAux.setEdificio(lastEdificioD);  //Checar esta parte
         decAux.setAbundancia(abundancia);
+        if (robots_cb.isSelected()) {
+            decAux.setRobots(true);
+        } else {
+            decAux.setRobots(false);
+        }
+
         dec.add(decAux);
 
     }
@@ -1543,6 +1594,11 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
             }
 
             float salariosHora = etf.getSalariosHora();
+
+            if (robots_cb.isSelected()) {//En caso que haya robots instalados`d
+                salariosHora = (float) (salariosHora * 0.97);
+            }
+
             float ProduccionHora = (bonificacion_produccion / 100 + 1) * materiaActual.getProduccionHora();
             int indexSelect = etf.getNumeroEdificio();
 
@@ -1611,6 +1667,55 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
         return preciosAux;
     }
 
+    //Para sacar el porcentaje de cada producto 
+    /*public void obtenPorcentajes() {
+        //for (int i = 0; i < edificios_combo.getItemCount(); i++) {
+            int index = edificios_combo.getSelectedIndex();
+            
+            System.out.println("Para edificio: " + etfT[index].getNumeroEdificio());
+            
+            for (int j = 0; j < etfT[index].getNumeroManeja(); j++) {
+                
+                dp.setIdioma(español);
+                if (etfT[edificios_combo.getSelectedIndex()] != null) {
+                    indexL = edificios_combo.getSelectedIndex();
+                }
+                
+                if (indexL >= 0) {
+                    DefaultTableModel mD = (DefaultTableModel) tablaD.getModel();
+                    int fila = tablaD.getSelectedRow();
+                    Object nombre = mD.getValueAt(fila, 0);
+                    dp.setNombreProducto((String) nombre);
+
+                    int[] codigosP = etfT[indexL].getProduceCodigos();
+                    dp.setAllPO(po);
+                    dp.setCalidadaAProducir(calidad);
+                    dp.setPO(po[codigosP[tablaD.getSelectedRow()]]);
+                    dp.setBonificacion(Float.parseFloat(bonificacion_txt.getText()));
+                    dp.setGastosAdmin(Float.parseFloat(gastos_administrativos_txt.getText()));
+                    dp.setSalario(etfT[indexL].getSalariosHora());
+                    dp.calculaInfo();
+                    
+                    if (indexL == 2 || indexL == 6 || indexL == 13) { //codigos de la cantera, mina y plataforma petrolera      
+                        dp.setAbundancia(abundancia);
+                    } else {
+                        dp.setAbundancia(100);
+                    }
+                    
+                    dp.calculaPorcentajes();
+                    dp.traduce();
+                    dp.muestraTodo();
+                    
+                    System.out.println(((String) nombre) + " " + dp.getPorcentajeMP() + "  " + dp.getPorcentajeSalarios() + "  "+
+                            dp.getPorcentajeAdmin());                   
+
+                    //dp.setVisible(true);
+                    
+                    
+                }
+            }
+        //}
+    }*/
     /**
      * @param args the command line arguments
      */
@@ -1703,6 +1808,7 @@ public class Calculadora_rentabilidad extends javax.swing.JFrame {
     private javax.swing.JLabel pvbm_lb;
     private javax.swing.JButton recalculaTablaB_button;
     private javax.swing.JButton recalcula_button;
+    private javax.swing.JCheckBox robots_cb;
     private javax.swing.JLabel tabajandoCon_lb;
     private javax.swing.JTable tablaA;
     private javax.swing.JTable tablaD;
